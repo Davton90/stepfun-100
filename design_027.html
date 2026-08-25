@@ -32,7 +32,7 @@
   class Particle{
     constructor(x,y,color){this.x=x;this.y=y;this.vx=(Math.random()-.5)*8;this.vy=(Math.random()-.5)*8;this.life=1;this.decay=.015+Math.random()*.02;this.color=color;this.size=2+Math.random()*3}
     update(){this.x+=this.vx;this.y+=this.vy;this.vy+=.08;this.vx*=.99;this.vy*=.99;this.life-=this.decay}
-    draw(){ctx.globalAlpha=this.life;ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size*this.life,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
+     draw(){ctx.globalAlpha=Math.max(0,this.life);ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,Math.max(0,this.size*this.life),0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
   }
   let particles=[];
   function launch(x,y){
