@@ -159,7 +159,6 @@
     item.addEventListener('click',()=>{setLastVisited(item.dataset.id);markVisited(item.dataset.id)});
   });
   // Auto-scroll to last visited item
-  const lastVisited=getLastVisited();
   if(lastVisited){
     const lastItem=document.querySelector(`.item[data-id="${lastVisited}"]`);
     if(lastItem){
