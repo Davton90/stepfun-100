@@ -11,13 +11,19 @@
   body{font-family:'Orbitron',sans-serif;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
   canvas{display:block;position:absolute;inset:0}
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.8rem;font-weight:700;z-index:2;color:#d4a574;letter-spacing:.5em;text-shadow:0 0 15px rgba(212,165,116,.4)}
+  .favorite-btn{position:fixed;top:20px;right:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s;cursor:pointer}
+  .favorite-btn:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+  .favorite-btn.is-favorite{background:rgba(255,0,128,.9);border-color:#ff0080}
 </style>
 <style>
   .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
   .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+  .favorite-btn{position:fixed;top:20px;right:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s;cursor:pointer}
+  .favorite-btn:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+  .favorite-btn.is-favorite{background:rgba(255,0,128,.9);border-color:#ff0080}
 </style>
 </head>
-<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
+<body><button class="favorite-btn" id="favBtn" onclick="toggleFavorite('$id')">☆ Add to Favorites</button><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">CLOCKWORK</div>
 <script>
@@ -52,6 +58,18 @@
   }
   draw();
 </script>
+<script>
+  (function(){
+    const FAVORITES_KEY='stepfun_favorites';
+    const btn=document.getElementById('favBtn');
+    if(!btn)return;
+    function getFavs(){try{const f=localStorage.getItem(FAVORITES_KEY);return f?JSON.parse(f):[]}catch(e){return[]}}
+    function updateBtn(){const favs=getFavs();if(favs.includes('$id')){btn.textContent='★ Remove from Favorites';btn.classList.add('is-favorite')}else{btn.textContent='☆ Add to Favorites';btn.classList.remove('is-favorite')}}
+    updateBtn();
+    window.addEventListener('storage',updateBtn);
+  })();
+</script>
 </body>
 </html>
+
 

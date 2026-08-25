@@ -14,13 +14,19 @@
   .val{color:#f1fa8c}
   .comment{color:#6272a4}
   .highlight{background:rgba(0,255,0,.1);padding:2px 4px}
+  .favorite-btn{position:fixed;top:20px;right:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s;cursor:pointer}
+  .favorite-btn:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+  .favorite-btn.is-favorite{background:rgba(255,0,128,.9);border-color:#ff0080}
 </style>
 <style>
   .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
   .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+  .favorite-btn{position:fixed;top:20px;right:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s;cursor:pointer}
+  .favorite-btn:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+  .favorite-btn.is-favorite{background:rgba(255,0,128,.9);border-color:#ff0080}
 </style>
 </head>
-<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
+<body><button class="favorite-btn" id="favBtn" onclick="toggleFavorite('$id')">☆ Add to Favorites</button><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <pre>
 <span class="comment">&lt;!-- NET ART HTML â€” code as visual poetry --&gt;</span>
 <span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"en"</span><span class="tag">&gt;</span>
@@ -55,6 +61,18 @@
     setTimeout(()=>el.remove(),3000);
   },500);
 </script>
+<script>
+  (function(){
+    const FAVORITES_KEY='stepfun_favorites';
+    const btn=document.getElementById('favBtn');
+    if(!btn)return;
+    function getFavs(){try{const f=localStorage.getItem(FAVORITES_KEY);return f?JSON.parse(f):[]}catch(e){return[]}}
+    function updateBtn(){const favs=getFavs();if(favs.includes('$id')){btn.textContent='★ Remove from Favorites';btn.classList.add('is-favorite')}else{btn.textContent='☆ Add to Favorites';btn.classList.remove('is-favorite')}}
+    updateBtn();
+    window.addEventListener('storage',updateBtn);
+  })();
+</script>
 </body>
 </html>
+
 

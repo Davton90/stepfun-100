@@ -14,7 +14,18 @@
   .continue-banner{background:linear-gradient(90deg,#ff0080,#00ffff);color:#000;padding:15px 25px;border-radius:12px;margin-bottom:30px;text-align:center;font-weight:600;cursor:pointer;display:none;max-width:600px;margin-left:auto;margin-right:auto;transition:transform .2s}
   .continue-banner:hover{transform:scale(1.02)}
   .continue-banner.show{display:block}
-  .list{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+  .favorites-section{margin-top:60px;max-width:800px;margin-left:auto;margin-right:auto}
+  .favorites-title{font-size:1.5rem;font-weight:700;margin-bottom:20px;color:#fff;display:flex;align-items:center;gap:10px}
+  .favorites-title .star{color:#ff0080;font-size:1.8rem}
+  .favorites-empty{color:#666;font-size:.9rem;font-style:italic;padding:20px 0}
+  .favorites-list{display:flex;flex-direction:column;gap:8px}
+  .fav-item{display:flex;align-items:center;padding:12px 16px;background:#1a0a10;border:1px solid #330a1a;border-radius:8px;cursor:pointer;transition:all .2s;text-decoration:none;color:#fff;gap:15px}
+  .fav-item:hover{background:#2a0a1a;border-color:#ff0080;transform:translateX(5px)}
+  .fav-item .number{font-size:1.2rem;font-weight:900;color:#ff0080;min-width:50px;text-align:center}
+  .fav-item .name{font-size:.9rem;color:#ccc;font-weight:300;flex:1}
+  .fav-item .remove{color:#666;font-size:1rem;cursor:pointer;padding:5px 10px;border-radius:4px;transition:all .2s;background:none;border:none}
+  .fav-item .remove:hover{color:#ff0080;background:rgba(255,0,128,.1)}
+</style>
   .item{display:flex;align-items:center;padding:16px 20px;background:#111;border:1px solid #222;border-radius:10px;cursor:pointer;transition:all .2s ease;text-decoration:none;color:#fff;gap:20px}
   .item:hover{background:#1a1a1a;border-color:#ff0080;transform:translateX(8px)}
   .item.visited{border-left:3px solid #ff0080}
@@ -135,11 +146,49 @@
   <a href="design_099.html" class="item" data-id="099"><div class="number">099</div><div class="name">Indian Mandala</div><div class="arrow">→</div></a>
   <a href="design_100.html" class="item" data-id="100"><div class="number">100</div><div class="name">Fractal Explorer</div><div class="arrow">→</div></a>
 </div>
+<div class="favorites-section" id="favoritesSection" style="display:none">
+  <div class="favorites-title"><span class="star">★</span> Your Favorites</div>
+  <div class="favorites-list" id="favoritesList"></div>
+</div>
 <script>
   const STORAGE_KEY='stepfun_last_visited';
+  const FAVORITES_KEY='stepfun_favorites';
   const items=document.querySelectorAll('.item');
   function getLastVisited(){try{return localStorage.getItem(STORAGE_KEY)}catch(e){return null}}
   function setLastVisited(id){try{localStorage.setItem(STORAGE_KEY,id)}catch(e){return}}
+  function getFavorites(){try{const f=localStorage.getItem(FAVORITES_KEY);return f?JSON.parse(f):[]}catch(e){return[]}}
+  function setFavorites(favs){try{localStorage.setItem(FAVORITES_KEY,JSON.stringify(favs))}catch(e){return}}
+  function isFavorite(id){return getFavorites().includes(id)}
+  function toggleFavorite(id){
+    let favs=getFavorites();
+    if(favs.includes(id)){favs=favs.filter(f=>f!==id)}
+    else{favs.push(id)}
+    setFavorites(favs);
+    renderFavorites();
+    updateAllFavoriteButtons();
+  }
+  function removeFavorite(id,event){
+    event.preventDefault();
+    event.stopPropagation();
+    toggleFavorite(id);
+  }
+  function renderFavorites(){
+    const favs=getFavorites();
+    const section=document.getElementById('favoritesSection');
+    const list=document.getElementById('favoritesList');
+    if(favs.length===0){section.style.display='none';return}
+    section.style.display='block';
+    list.innerHTML='';
+    const names={};
+    document.querySelectorAll('.item').forEach(item=>{names[item.dataset.id]=item.querySelector('.name').textContent});
+    favs.forEach(id=>{
+      const item=document.createElement('a');
+      item.href=`design_${id}.html`;
+      item.className='fav-item';
+      item.innerHTML=`<div class="number">${id}</div><div class="name">${names[id]||'Design #'+id}</div><button class="remove" onclick="removeFavorite('${id}',event)">✕</button>`;
+      list.appendChild(item);
+    });
+  }
   function markVisited(id){
     items.forEach(item=>{item.classList.toggle('visited',item.dataset.id===id)});
   }
@@ -165,6 +214,10 @@
       setTimeout(()=>{lastItem.scrollIntoView({behavior:'smooth',block:'center'})},300);
     }
   }
+  // Render favorites on load
+  renderFavorites();
+  // Expose toggleFavorite globally so design pages can call it
+  window.toggleFavorite=function(id){toggleFavorite(id)};
 </script>
 </body>
 </html>
