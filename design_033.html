@@ -1,0 +1,80 @@
+<!-- Design: Cellular Automata | Unique approach: Conway's Game of Life with click toggle -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cellular Automata</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Mono',monospace;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.8rem;font-weight:700;color:#0f0;z-index:2;letter-spacing:.3em;text-shadow:0 0 10px #0f0}
+  .hud{position:absolute;top:30px;right:30px;font-size:.7rem;color:#0f0;z-index:2;text-align:right;line-height:1.8}
+  .hint{position:absolute;bottom:30px;font-size:.8rem;color:rgba(0,255,0,.5);z-index:2;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">GAME OF LIFE</div>
+<div class="hud"><div>GEN: <span id="gen">0</span></div><div>POP: <span id="pop">0</span></div></div>
+<div class="hint">click to toggle cells // space to pause</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,cellSize=8,grid=[],generation=0,paused=false;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;initGrid()}
+  function initGrid(){
+    const cols=Math.floor(w/cellSize),rows=Math.floor(h/cellSize);
+    grid=Array.from({length:rows},()=>Array.from({length:cols},()=>Math.random()>.7?1:0));
+    generation=0;
+  }
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>{
+    const cols=Math.floor(w/cellSize),rows=Math.floor(h/cellSize);
+    const c=Math.floor(e.clientX/cellSize),r=Math.floor(e.clientY/cellSize);
+    if(r>=0&&r<rows&&c>=0&&c<cols)grid[r][c]=grid[r][c]?0:1;
+  });
+  addEventListener('keydown',e=>{if(e.code==='Space')paused=!paused});
+  function countNeighbors(r,c){
+    let sum=0;
+    for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){
+      if(dr===0&&dc===0)continue;
+      const nr=(r+dr+grid.length)%grid.length,nc=(c+dc+grid[0].length)%grid[0].length;
+      sum+=grid[nr][nc];
+    }
+    return sum;
+  }
+  let pop=0;
+  function update(){
+    const newGrid=grid.map(row=>[...row]);
+    pop=0;
+    grid.forEach((row,r)=>row.forEach((cell,c)=>{
+      const neighbors=countNeighbors(r,c);
+      if(cell&&(neighbors<2||neighbors>3))newGrid[r][c]=0;
+      else if(!cell&&neighbors===3)newGrid[r][c]=1;
+      if(newGrid[r][c])pop++;
+    }));
+    grid=newGrid;generation++;
+  }
+  function draw(){
+    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,w,h);
+    grid.forEach((row,r)=>row.forEach((cell,c)=>{
+      if(cell){
+        const hue=generation*.5%360;
+        ctx.fillStyle=`hsl(${hue},100%,50%)`;ctx.globalAlpha=.8;
+        ctx.fillRect(c*cellSize,r*cellSize,cellSize-1,cellSize-1);
+      }
+    }));
+    ctx.globalAlpha=1;
+    document.getElementById('gen').textContent=generation;
+    document.getElementById('pop').textContent=pop;
+  }
+  function loop(){
+    if(!paused)update();
+    draw();requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

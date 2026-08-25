@@ -1,0 +1,46 @@
+<!-- Design: Silkpunk Weave | Unique approach: silk textures and Asian patterns weaving -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silkpunk Weave</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Serif JP',serif;background:#f5f0e8;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#8b0000;letter-spacing:.3em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#666;font-style:italic}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">織物</div>
+<div class="hint">move mouse to weave</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  let t=0;
+  function draw(){
+    t+=.01;
+    ctx.fillStyle='#f5f0e8';ctx.fillRect(0,0,w,h);
+    const threadCount=40;
+    for(let i=0;i<threadCount;i++){
+      const y=(i/threadCount)*h;
+      const hue=(i*5+t*10)%360;
+      const shift=Math.sin(y*.01+t+i)*20+(mouse.y-.5)*50;
+      ctx.strokeStyle=`hsla(${hue},60%,40%,.4)`;ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(0,y+shift);
+      for(let x=0;x<=w;x+=10){ctx.lineTo(x,y+shift+Math.sin(x*.02+t+i)*10)}
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

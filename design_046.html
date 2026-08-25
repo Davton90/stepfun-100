@@ -1,0 +1,34 @@
+<!-- Design: Swiss Style Poster | Unique approach: strong grid, asymmetric layout, hover layout lines -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swiss Style Poster</title>
+<link href="https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@400;700&family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#fff;overflow:hidden;height:100vh;display:flex;align-items:stretch}
+  .grid{position:absolute;inset:0;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(12,1fr);opacity:0;transition:opacity .5s;pointer-events:none}
+  body:hover .grid{opacity:1}
+  .col,.row{background:rgba(255,0,0,.1)}
+  .content{position:relative;z-index:2;width:100%;padding:40px;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(12,1fr)}
+  .big{grid-column:2/11;grid-row:3/8;font-size:8rem;font-weight:700;line-height:.9;color:#000;display:flex;align-items:center}
+  .accent{grid-column:8/13;grid-row:6/10;background:#ff0000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;letter-spacing:.2em}
+  .small{grid-column:2/6;grid-row:9/12;font-size:.9rem;color:#666;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="grid" id="grid"></div>
+<div class="content">
+  <div class="big">SWISS<br>DESIGN</div>
+  <div class="accent">INTERNATIONAL</div>
+  <div class="small">Grid-based precision. Mathematical clarity. The International Typographic Style emphasizes cleanliness, readability, and objectivity. Hover to reveal the underlying structure.</div>
+</div>
+<script>
+  const grid=document.getElementById('grid');
+  for(let i=0;i<12;i++){const col=document.createElement('div');col.className='col';grid.appendChild(col)}
+  for(let i=0;i<12;i++){const row=document.createElement('div');row.className='row';grid.appendChild(row)}
+</script>
+</body>
+</html>

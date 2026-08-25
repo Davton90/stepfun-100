@@ -1,0 +1,61 @@
+<!-- Design: VHS Glitch Portrait | Unique approach: tracking lines and color bleed with mouse shake -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VHS Glitch Portrait</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'VT323',monospace;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;left:30px;font-size:1.5rem;color:#ff3333;z-index:2;text-shadow:2px 0 #00ffff,-2px 0 #ff00ff;animation:glitch .3s infinite}
+  @keyframes glitch{0%{transform:translate(0)}20%{transform:translate(-2px,2px)}40%{transform:translate(2px,-2px)}60%{transform:translate(-1px,1px)}80%{transform:translate(1px,-1px)}100%{transform:translate(0)}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">VHS // TRACKING ERROR</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouseSpeed=0,lastX=0,lastY=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{const dx=e.clientX-lastX,dy=e.clientY-lastY;mouseSpeed=Math.hypot(dx,dy);lastX=e.clientX;lastY=e.clientY});
+  function draw(){
+    // Base image (drawn procedurally as "portrait")
+    ctx.fillStyle='#111';ctx.fillRect(0,0,w,h);
+    // Face-like shape
+    ctx.fillStyle='#d4a574';ctx.beginPath();ctx.ellipse(w/2,h/2,80,100,0,0,Math.PI*2);ctx.fill();
+    // Eyes
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(w/2-25,h/2-15,15,10,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(w/2+25,h/2-15,15,10,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#000';ctx.beginPath();ctx.ellipse(w/2-25,h/2-15,6,6,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(w/2+25,h/2-15,6,6,0,0,Math.PI*2);ctx.fill();
+    // Mouth
+    ctx.fillStyle='#c44';ctx.fillRect(w/2-20,h/2+30,40,8);
+    // Glitch effects
+    if(mouseSpeed>10||Math.random()<.02){
+      const slices=3+Math.floor(Math.random()*5);
+      for(let i=0;i<slices;i++){
+        const y=Math.random()*h;const sliceH=5+Math.random()*30;const offset=(Math.random()-.5)*40+mouseSpeed*(Math.random()-.5)*2;
+        const img=ctx.getImageData(0,y,w,sliceH);ctx.putImageData(img,offset,y);
+      }
+    }
+    // Color channel shift
+    if(Math.random()<.1){
+      ctx.globalCompositeOperation='screen';ctx.fillStyle='rgba(255,0,0,.1)';ctx.fillRect(3,0,w,h);ctx.fillStyle='rgba(0,0,255,.1)';ctx.fillRect(-3,0,w,h);ctx.globalCompositeOperation='source-over';
+    }
+    // Scanlines
+    ctx.fillStyle='rgba(0,0,0,.3)';
+    for(let y=0;y<h;y+=3)ctx.fillRect(0,y,w,1);
+    // Tracking lines
+    if(Math.random()<.05){
+      const y=Math.random()*h;ctx.fillStyle='rgba(255,255,255,.8)';ctx.fillRect(0,y,w,2);
+    }
+    mouseSpeed*=.9;
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

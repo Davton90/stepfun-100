@@ -1,0 +1,40 @@
+<!-- Design: Glassmorphism Dashboard | Unique approach: frosted glass cards that tilt on mouse move -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glassmorphism Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px}
+  .card{width:280px;padding:30px;background:rgba(255,255,255,.15);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.3);border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,.1);transition:transform .2s ease-out,box-shadow .2s;cursor:pointer}
+  .card:hover{box-shadow:0 12px 40px rgba(0,0,0,.2)}
+  .card h3{color:#fff;font-weight:500;margin-bottom:10px;font-size:1.1rem}
+  .card p{color:rgba(255,255,255,.8);font-size:.85rem;font-weight:300}
+  .card .value{font-size:2rem;font-weight:700;color:#fff;margin:15px 0}
+  .card .label{font-size:.75rem;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:900px;padding:20px}
+</style>
+</head>
+<body>
+<div class="grid">
+  <div class="card"><div class="label">Revenue</div><div class="value">$48.2K</div><p>+12.5% from last month</p></div>
+  <div class="card"><div class="label">Users</div><div class="value">12.4K</div><p>+8.2% new signups</p></div>
+  <div class="card"><div class="label">Conversion</div><div class="value">3.24%</div><p>+0.8% improvement</p></div>
+  <div class="card"><div class="label">Bounce Rate</div><div class="value">32.1%</div><p>-2.1% from last week</p></div>
+</div>
+<script>
+  document.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const rect=card.getBoundingClientRect();
+      const x=e.clientX-rect.left-rect.width/2;
+      const y=e.clientY-rect.top-rect.height/2;
+      card.style.transform=`perspective(500px) rotateY(${x*.03}deg) rotateX(${-y*.03}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{card.style.transform='perspective(500px) rotateY(0deg) rotateX(0deg)'});
+  });
+</script>
+</body>
+</html>

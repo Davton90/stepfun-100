@@ -1,0 +1,48 @@
+<!-- Design: Particle Fireworks | Unique approach: physics-based firework particles on click -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Particle Fireworks</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Quicksand',sans-serif;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;color:#fff;z-index:2;text-shadow:0 0 20px rgba(255,255,255,.5);letter-spacing:.3em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;color:rgba(255,255,255,.5);z-index:2}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">FIREWORKS</div>
+<div class="hint">click anywhere to launch</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>launch(e.clientX,e.clientY));
+  addEventListener('touchstart',e=>{const t=e.touches[0];launch(t.clientX,t.clientY)});
+  class Particle{
+    constructor(x,y,color){this.x=x;this.y=y;this.vx=(Math.random()-.5)*8;this.vy=(Math.random()-.5)*8;this.life=1;this.decay=.015+Math.random()*.02;this.color=color;this.size=2+Math.random()*3}
+    update(){this.x+=this.vx;this.y+=this.vy;this.vy+=.08;this.vx*=.99;this.vy*=.99;this.life-=this.decay}
+    draw(){ctx.globalAlpha=this.life;ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size*this.life,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
+  }
+  let particles=[];
+  function launch(x,y){
+    const colors=['#ff0080','#00ffff','#ffff00','#ff8800','#88ff00','#ff00ff'];
+    const color=colors[Math.floor(Math.random()*colors.length)];
+    for(let i=0;i<80;i++)particles.push(new Particle(x,y,color));
+  }
+  function loop(){
+    ctx.fillStyle='rgba(0,0,0,.15)';ctx.fillRect(0,0,w,h);
+    particles=particles.filter(p=>p.life>0);
+    particles.forEach(p=>{p.update();p.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

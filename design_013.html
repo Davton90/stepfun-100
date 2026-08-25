@@ -1,0 +1,42 @@
+<!-- Design: Neumorphic Control Panel | Unique approach: soft shadow buttons with press interaction -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neumorphic Control Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:#e0e5ec;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  .panel{background:#e0e5ec;padding:40px;border-radius:30px;box-shadow:20px 20px 60px #a3b1c6,-20px -20px 60px #ffffff;min-width:320px}
+  h2{text-align:center;color:#4a5568;margin-bottom:30px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+  .control{margin-bottom:25px}
+  .label{display:flex;justify-content:space-between;color:#718096;font-size:.85rem;margin-bottom:10px;font-weight:500}
+  .toggle{width:60px;height:30px;background:#e0e5ec;border-radius:15px;box-shadow:inset 5px 5px 10px #a3b1c6,inset -5px -5px 10px #ffffff;cursor:pointer;position:relative;transition:box-shadow .2s}
+  .toggle::after{content:'';position:absolute;width:24px;height:24px;background:#e0e5ec;border-radius:50%;top:3px;left:3px;box-shadow:3px 3px 7px #a3b1c6,-3px -3px 7px #ffffff;transition:transform .2s}
+  .toggle.active{box-shadow:inset 3px 3px 6px #a3b1c6,inset -3px -3px 6px #ffffff}
+  .toggle.active::after{transform:translateX(30px)}
+  .btn{width:100%;padding:15px;border:none;border-radius:12px;background:#e0e5ec;color:#4a5568;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:6px 6px 12px #a3b1c6,-6px -6px 12px #ffffff;transition:box-shadow .1s}
+  .btn:active{box-shadow:inset 4px 4px 8px #a3b1c6,inset -4px -4px 8px #ffffff}
+  .slider{-webkit-appearance:none;width:100%;height:8px;border-radius:4px;background:#e0e5ec;outline:none;box-shadow:inset 3px 3px 6px #a3b1c6,inset -3px -3px 6px #ffffff}
+  .slider::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#e0e5ec;box-shadow:3px 3px 7px #a3b1c6,-3px -3px 7px #ffffff;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="panel">
+  <h2>Control Panel</h2>
+  <div class="control">
+    <div class="label"><span>Dark Mode</span><div class="toggle" onclick="this.classList.toggle('active')"></div></div>
+  </div>
+  <div class="control">
+    <div class="label"><span>Notifications</span><div class="toggle active" onclick="this.classList.toggle('active')"></div></div>
+  </div>
+  <div class="control">
+    <div class="label"><span>Brightness</span><span id="val">75%</span></div>
+    <input type="range" class="slider" min="0" max="100" value="75" oninput="document.getElementById('val').textContent=this.value+'%'">
+  </div>
+  <button class="btn" onclick="this.style.boxShadow='inset 4px 4px 8px #a3b1c6,inset -4px -4px 8px #ffffff'">Press Me</button>
+</div>
+</body>
+</html>

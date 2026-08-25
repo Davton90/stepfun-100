@@ -1,0 +1,72 @@
+<!-- Design: Boids Flocking | Unique approach: flocking simulation with mouse attract/repel -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boids Flocking</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#0a1628;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:300;z-index:2;color:#e0f0ff;letter-spacing:.3em}
+  .subtitle{position:absolute;bottom:30px;font-size:.8rem;color:#4a6fa5;z-index:2;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">FLOCK</div>
+<div class="subtitle">move mouse to attract // click to repel</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999,down:false};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  addEventListener('mousedown',()=>mouse.down=true);
+  addEventListener('mouseup',()=>mouse.down=false);
+  class Boid{
+    constructor(){this.x=Math.random()*w;this.y=Math.random()*h;this.vx=(Math.random()-.5)*4;this.vy=(Math.random()-.5)*4;this.color=`hsla(${200+Math.random()*40},80%,70%,.8)`}
+    update(boids){
+      // Separation
+      let sepX=0,sepY=0,sepCount=0;
+      // Alignment
+      let alignX=0,alignY=0,alignCount=0;
+      // Cohesion
+      let cohX=0,cohY=0,cohCount=0;
+      boids.forEach(other=>{
+        if(other===this)return;
+        const dx=other.x-this.x,dy=other.y-this.y,dist=Math.hypot(dx,dy);
+        if(dist<30){sepX-=dx/dist;sepY-=dy/dist;sepCount++}
+        if(dist<80){alignX+=other.vx;alignY+=other.vy;alignCount++;cohX+=other.x;cohY+=other.y;cohCount++}
+      });
+      if(sepCount>0){this.vx+=sepX*.05;this.vy+=sepY*.05}
+      if(alignCount>0){this.vx+=(alignX/alignCount-this.vx)*.05;this.vy+=(alignY/alignCount-this.vy)*.05}
+      if(cohCount>0){this.vx+=(cohX/cohCount-this.x)*.01;this.vy+=(cohY/cohCount-this.y)*.01}
+      // Mouse
+      if(mouse.x>0){
+        const dx=mouse.x-this.x,dy=mouse.y-this.y,dist=Math.hypot(dx,dy);
+        if(dist<200){const f=(200-dist)/200;const dir=mouse.down?-1:1;this.vx+=dx/dist*f*dir*.3;this.vy+=dy/dist*f*dir*.3}
+      }
+      this.x+=this.vx;this.y+=this.vy;
+      if(this.x<0||this.x>w)this.vx*=-1;
+      if(this.y<0||this.y>h)this.vy*=-1;
+    }
+    draw(){
+      ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,3,0,Math.PI*2);ctx.fill();
+      // Direction line
+      ctx.strokeStyle=this.color;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(this.x,this.y);ctx.lineTo(this.x+this.vx*5,this.y+this.vy*5);ctx.stroke();
+    }
+  }
+  const boids=Array.from({length:80},()=>new Boid());
+  function loop(){
+    ctx.fillStyle='rgba(10,22,40,.15)';ctx.fillRect(0,0,w,h);
+    boids.forEach(b=>b.update(boids));
+    boids.forEach(b=>b.draw());
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!-- Design: Outrun Racing | Unique approach: fast speed lines with orange/purple/black -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outrun Racing</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Orbitron',sans-serif;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;width:100%;text-align:center;font-size:3rem;font-weight:900;z-index:2;color:#ff8800;text-shadow:0 0 30px #ff8800;letter-spacing:.5em}
+  .hud{position:absolute;bottom:40px;width:100%;text-align:center;font-size:.9rem;z-index:2;color:#8800ff;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">OUTRUN</div>
+<div class="hud">SPEED: <span id="speed">0</span> KM/H</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,speed=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>speed=speed>50?10:speed+10);
+  let lines=[];
+  function loop(){
+    speed=Math.min(200,speed+.1);
+    ctx.fillStyle='rgba(0,0,0,.1)';ctx.fillRect(0,0,w,h);
+    const cx=w/2,cy=h/2;
+    for(let i=0;i<10;i++){
+      const angle=Math.random()*Math.PI*2;
+      const dist=100+Math.random()*300;
+      const x=cx+Math.cos(angle)*dist;
+      const y=cy+Math.sin(angle)*dist;
+      const len=20+speed*.5;
+      const hue=(speed+angle*50)%360;
+      ctx.strokeStyle=`hsl(${hue},100%,60%)`;ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+Math.cos(angle)*len,y+Math.sin(angle)*len);ctx.stroke();
+    }
+    document.getElementById('speed').textContent=Math.floor(speed);
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

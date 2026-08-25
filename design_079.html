@@ -1,0 +1,44 @@
+<!-- Design: New Wave Graph | Unique approach: neon geometric waves distorting with mouse -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Wave Graph</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Orbitron',sans-serif;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#0ff;letter-spacing:.5em;text-shadow:0 0 20px #0ff}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">NEW WAVE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  let t=0;
+  function draw(){
+    t+=.02;
+    ctx.fillStyle='rgba(0,0,0,.1)';ctx.fillRect(0,0,w,h);
+    for(let wave=0;wave<5;wave++){
+      ctx.beginPath();
+      const hue=(t*20+wave*40)%360;
+      ctx.strokeStyle=`hsl(${hue},100%,50%)`;ctx.lineWidth=2;
+      for(let x=0;x<=w;x+=5){
+        const y=h/2+Math.sin(x*.01+t*2+wave)*50*(1+Math.abs(mouse.x-.5)*2)+Math.sin(x*.03+t)*20*(mouse.y-.5)*100;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

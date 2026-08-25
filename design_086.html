@@ -1,0 +1,61 @@
+<!-- Design: Atompunk Atomic | Unique approach: 50s atomic age atoms orbiting with click split -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atompunk Atomic</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rajdhani',sans-serif;background:#2a1a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2.5rem;font-weight:700;z-index:2;color:#e9c46a;letter-spacing:.5em;text-shadow:0 0 20px rgba(233,196,106,.5)}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#8b6f47;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">ATOMIC</div>
+<div class="hint">click to split atom</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>split=true);
+  let t=0,split=false,splitTimer=0;
+  function draw(){
+    t+=.02;
+    ctx.fillStyle='rgba(42,26,10,.1)';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);
+    // Nucleus
+    const nucleusR=20+Math.sin(t*3)*5;
+    const grad=ctx.createRadialGradient(0,0,0,0,0,nucleusR);
+    grad.addColorStop(0,'#fff');grad.addColorStop(.5,'#e9c46a');grad.addColorStop(1,'#f4a261');
+    ctx.fillStyle=grad;ctx.beginPath();ctx.arc(0,0,nucleusR,0,Math.PI*2);ctx.fill();
+    // Electrons
+    for(let i=0;i<3;i++){
+      const angle=t+i*Math.PI*2/3;
+      const r=80+Math.sin(t*2+i)*20;
+      const x=Math.cos(angle)*r;const y=Math.sin(angle)*r;
+      ctx.fillStyle='#2a9d8f';ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='rgba(42,157,143,.3)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(x,y);ctx.stroke();
+    }
+    if(split){
+      splitTimer++;
+      for(let i=0;i<3;i++){
+        const angle=t+i*Math.PI*2/3;
+        const r=80+splitTimer*2;
+        const x=Math.cos(angle)*r;const y=Math.sin(angle)*r;
+        ctx.fillStyle=`rgba(233,196,106,${1-splitTimer/100})`;ctx.beginPath();ctx.arc(x,y,8+splitTimer*.2,0,Math.PI*2);ctx.fill();
+      }
+      if(splitTimer>100)split=false;
+    }
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

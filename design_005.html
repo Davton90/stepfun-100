@@ -1,0 +1,50 @@
+<!-- Design: Vaporwave Grid Plane | Unique approach: perspective grid with endless forward motion and retro sun -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vaporwave Grid Plane</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Press Start 2P',cursive;background:#0f0c29;overflow:hidden;height:100vh;color:#ff71ce}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;left:30px;font-size:1.2rem;z-index:2;text-shadow:0 0 10px #ff71ce;letter-spacing:.2em}
+  .subtitle{position:absolute;bottom:30px;right:30px;font-size:.6rem;z-index:2;color:#01cdfe;text-shadow:0 0 10px #01cdfe}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">VAPORWAVE</div>
+<div class="subtitle"> endless grid </div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,offset=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  function draw(){
+    ctx.fillStyle='#0f0c29';ctx.fillRect(0,0,w,h);
+    // Sun
+    const grad=ctx.createLinearGradient(0,h*.35,0,h*.6);
+    grad.addColorStop(0,'#ff71ce');grad.addColorStop(.5,'#fffb96');grad.addColorStop(1,'#01cdfe');
+    ctx.fillStyle=grad;ctx.beginPath();ctx.arc(w/2,h*.45,120,0,Math.PI*2);ctx.fill();
+    // Grid
+    ctx.strokeStyle='#ff71ce';ctx.lineWidth=1.5;ctx.globalAlpha=.6;
+    const horizon=h*.5;
+    for(let i=0;i<20;i++){
+      const y=horizon+(i/20)*(h-horizon);
+      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+    }
+    for(let i=-10;i<=10;i++){
+      const x=w/2+i*80;
+      ctx.beginPath();ctx.moveTo(w/2,horizon);ctx.lineTo(x,h);ctx.stroke();
+    }
+    offset=(offset+1)%40;
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!-- Design: Bauhaus Geometric Stage | Unique approach: animated primary shapes on grid with mouse parallax -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bauhaus Geometric Stage</title>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Josefin Sans',sans-serif;background:#f5f5f5;overflow:hidden;height:100vh;color:#1D3557}
+  .stage{position:relative;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .title{font-size:3rem;font-weight:700;text-align:center;margin-bottom:20px;letter-spacing:.1em;z-index:2}
+  .subtitle{font-size:1.2rem;opacity:.8;text-align:center;z-index:2}
+  .shape{position:absolute;opacity:.8;transition:transform .3s ease-out}
+  .circle{width:180px;height:180px;background:#E63946;border-radius:50%;top:15%;left:18%}
+  .square{width:140px;height:140px;background:#1D3557;top:55%;right:20%}
+  .triangle{width:0;height:0;border-left:100px solid transparent;border-right:100px solid transparent;border-bottom:173px solid #457B9D;bottom:18%;left:45%}
+  .grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px);background-size:40px 40px;z-index:0}
+</style>
+</head>
+<body>
+<div class="stage" id="stage">
+  <div class="grid-bg"></div>
+  <div class="shape circle" data-speed="0.03"></div>
+  <div class="shape square" data-speed="0.05"></div>
+  <div class="shape triangle" data-speed="0.04"></div>
+  <div class="title">Bauhaus Geometric</div>
+  <div class="subtitle">Form follows function</div>
+</div>
+<script>
+  const stage=document.getElementById('stage');
+  const shapes=document.querySelectorAll('.shape');
+  document.addEventListener('mousemove',e=>{
+    const x=(e.clientX/window.innerWidth-.5)*2;
+    const y=(e.clientY/window.innerHeight-.5)*2;
+    shapes.forEach(s=>{
+      const speed=parseFloat(s.dataset.speed);
+      const tx=x*speed*100;
+      const ty=y*speed*100;
+      s.style.transform=`translate(${tx}px,${ty}px)`;
+    });
+  });
+</script>
+</body>
+</html>

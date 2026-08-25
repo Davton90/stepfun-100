@@ -1,0 +1,54 @@
+<!-- Design: Y2K Chrome Bubble | Unique approach: iridescent floating blobs with mouse push interaction -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y2K Chrome Bubble</title>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Monoton',cursive;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);overflow:hidden;height:100vh;color:#fff}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;width:100%;text-align:center;font-size:2.5rem;z-index:2;letter-spacing:.3em;background:linear-gradient(90deg,#ff00de,#00ffff,#ff00de);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:shine 3s linear infinite}
+  @keyframes shine{to{background-position:200% center}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">CHROME BUBBLE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  class Blob{
+    constructor(){this.x=Math.random()*w;this.y=Math.random()*h;this.r=40+Math.random()*80;this.vx=(Math.random()-.5)*1.5;this.vy=(Math.random()-.5)*1.5;this.hue=Math.random()*360}
+    update(){
+      this.x+=this.vx;this.y+=this.vy;
+      if(this.x<this.r||this.x>w-this.r)this.vx*=-1;
+      if(this.y<this.r||this.y>h-this.r)this.vy*=-1;
+      const dx=this.x-mouse.x,dy=this.y-mouse.y,dist=Math.hypot(dx,dy);
+      if(dist<200){const f=(200-dist)/200;this.vx+=dx/dist*f*.5;this.vy+=dy/dist*f*.5}
+      this.vx*=.98;this.vy*=.98;
+    }
+    draw(){
+      const grad=ctx.createRadialGradient(this.x-this.r*.3,this.y-this.r*.3,this.r*.1,this.x,this.y,this.r);
+      grad.addColorStop(0,`hsla(${this.hue},100%,85%,.9)`);
+      grad.addColorStop(.5,`hsla(${this.hue},80%,55%,.7)`);
+      grad.addColorStop(1,`hsla(${this.hue+40},100%,40%,.4)`);
+      ctx.fillStyle=grad;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle=`hsla(${this.hue},100%,70%,.6)`;ctx.lineWidth=2;ctx.stroke();
+    }
+  }
+  const blobs=Array.from({length:12},()=>new Blob());
+  function loop(){
+    ctx.fillStyle='rgba(15,12,41,.15)';ctx.fillRect(0,0,w,h);
+    blobs.forEach(b=>{b.update();b.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

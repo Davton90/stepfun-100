@@ -1,0 +1,50 @@
+<!-- Design: Lyrical Abstraction | Unique approach: soft flowing color bands blending like watercolor -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lyrical Abstraction</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cormorant Garamond',serif;background:#faf8f5;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:300;font-style:italic;z-index:2;color:#6b6b5a;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">Watercolor Dreams</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  let bands=[];
+  for(let i=0;i<5;i++)bands.push({y:h*(.2+i*.15),hue:30+i*30,amp:30+i*10,speed:.5+i*.2});
+  function loop(){
+    ctx.fillStyle='rgba(250,248,245,.05)';ctx.fillRect(0,0,w,h);
+    const time=Date.now()*.001;
+    bands.forEach(b=>{
+      ctx.beginPath();
+      ctx.moveTo(0,b.y);
+      for(let x=0;x<=w;x+=5){
+        const y=b.y+Math.sin(x*.01+time*b.speed)*b.amp+(mouse.y-.5)*50;
+        ctx.lineTo(x,y);
+      }
+      for(let x=w;x>=0;x-=5){
+        const y=b.y+50+Math.sin(x*.01+time*b.speed+1)*b.amp*.7+(mouse.y-.5)*30;
+        ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      ctx.fillStyle=`hsla(${b.hue+Math.sin(time)*20},60%,70%,.15)`;
+      ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

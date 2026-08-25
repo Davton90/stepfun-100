@@ -1,0 +1,45 @@
+<!-- Design: Darkcore Abyss | Unique approach: deep purple/black with stars and mouse light trail -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Darkcore Abyss</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cinzel',serif;background:#0a001a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#9b59b6;text-shadow:0 0 30px rgba(155,89,182,.5);letter-spacing:.5em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">ABYSS</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  const stars=Array.from({length:200},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.5,blink:Math.random()*Math.PI*2}));
+  let trail=[];
+  function loop(){
+    ctx.fillStyle='#0a001a';ctx.fillRect(0,0,w,h);
+    // Stars
+    stars.forEach(s=>{
+      s.blink+=.02;const a=.3+Math.sin(s.blink)*.3;
+      ctx.fillStyle=`rgba(255,255,255,${a})`;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill();
+    });
+    // Trail
+    if(mouse.x>0){
+      trail.push({x:mouse.x,y:mouse.y,life:1});
+      trail.forEach(t=>{t.life-=.02;ctx.fillStyle=`rgba(155,89,182,${t.life*.5})`;ctx.beginPath();ctx.arc(t.x,t.y,5,0,Math.PI*2);ctx.fill()});
+      trail=trail.filter(t=>t.life>0);
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

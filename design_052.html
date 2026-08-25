@@ -1,0 +1,46 @@
+<!-- Design: Maximalist Chaos | Unique approach: clashing patterns, colors, constant motion -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maximalist Chaos</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Rubik+Mono+One&family=Creepster&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#000;overflow:hidden;height:100vh}
+  canvas{display:block;position:absolute;inset:0}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  const fonts=['Bangers','Rubik Mono One','Creepster'];
+  const colors=['#ff0080','#00ffff','#ffff00','#ff8800','#8800ff','#00ff00','#ff0000'];
+  let shapes=[];
+  for(let i=0;i<30;i++)shapes.push({x:Math.random()*w,y:Math.random()*h,size:20+Math.random()*100,color:colors[Math.floor(Math.random()*colors.length)],type:Math.floor(Math.random()*5),vx:(Math.random()-.5)*4,vy:(Math.random()-.5)*4,rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-.5)*.1});
+  addEventListener('click',e=>{for(let i=0;i<10;i++)shapes.push({x:e.clientX,y:e.clientY,size:20+Math.random()*80,color:colors[Math.floor(Math.random()*colors.length)],type:Math.floor(Math.random()*5),vx:(Math.random()-.5)*8,vy:(Math.random()-.5)*8,rot:Math.random()*Math.PI*2,rotSpeed:(Math.random()-.5)*.3})});
+  function draw(){
+    if(Math.random()<.1){ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];ctx.globalAlpha=.05;ctx.fillRect(0,0,w,h);ctx.globalAlpha=1}
+    else{ctx.fillStyle='rgba(0,0,0,.1)';ctx.fillRect(0,0,w,h)}
+    shapes.forEach(s=>{
+      s.x+=s.vx;s.y+=s.vy;s.rot+=s.rotSpeed;
+      if(s.x<0||s.x>w)s.vx*=-1;if(s.y<0||s.y>h)s.vy*=-1;
+      ctx.save();ctx.translate(s.x,s.y);ctx.rotate(s.rot);
+      ctx.fillStyle=s.color;ctx.strokeStyle='#000';ctx.lineWidth=3;
+      if(s.type===0){ctx.fillRect(-s.size/2,-s.size/2,s.size,s.size);ctx.strokeRect(-s.size/2,-s.size/2,s.size,s.size)}
+      else if(s.type===1){ctx.beginPath();ctx.arc(0,0,s.size/2,0,Math.PI*2);ctx.fill();ctx.stroke()}
+      else if(s.type===2){ctx.font=`${s.size*.5}px ${fonts[Math.floor(Math.random()*fonts.length)]}`;ctx.fillText('CHAOS',-s.size/2,s.size/2)}
+      else{ctx.beginPath();ctx.moveTo(0,-s.size/2);ctx.lineTo(s.size/2,s.size/2);ctx.lineTo(-s.size/2,s.size/2);ctx.closePath();ctx.fill();ctx.stroke()}
+      ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

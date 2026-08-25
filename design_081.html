@@ -1,0 +1,50 @@
+<!-- Design: Retrowave Grid | Unique approach: neon perspective grid with sun on horizon -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retrowave Grid</title>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Monoton',cursive;background:#0a0020;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;width:100%;text-align:center;font-size:2rem;z-index:2;color:#ff00ff;text-shadow:0 0 20px #ff00ff;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">RETROWAVE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,offset=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  function draw(){
+    offset+=1;
+    // Sky
+    const sky=ctx.createLinearGradient(0,0,0,h*.5);
+    sky.addColorStop(0,'#0a0020');sky.addColorStop(1,'#4a0080');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,w,h*.5);
+    // Sun
+    ctx.fillStyle='#ff8800';ctx.beginPath();ctx.arc(w/2,h*.35,60,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#0a0020';
+    for(let i=0;i<5;i++)ctx.fillRect(w/2-60,h*.25+i*12,120,6);
+    // Ground
+    ctx.fillStyle='#1a0030';ctx.fillRect(0,h*.5,w,h*.5);
+    // Grid
+    ctx.strokeStyle='#ff00ff';ctx.lineWidth=2;ctx.globalAlpha=.7;
+    for(let i=0;i<20;i++){
+      const y=h*.5+i*((h*.5)/20);ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+    }
+    for(let i=-15;i<=15;i++){
+      const x=w/2+i*50;ctx.beginPath();ctx.moveTo(w/2,h*.5);ctx.lineTo(x,h);ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

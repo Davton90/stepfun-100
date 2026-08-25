@@ -1,0 +1,41 @@
+<!-- Design: African Textile Pattern | Unique approach: vibrant kente colors weaving pattern -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>African Textile Pattern</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#000;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">KENTE CLOTH</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  const colors=['#ff0000','#ffff00','#00ff00','#0000ff','#ff8800','#8800ff'];
+  function draw(){
+    ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+    const size=40;
+    for(let y=0;y<h;y+=size){
+      for(let x=0;x<w;x+=size){
+        const idx=(Math.floor(x/size)+Math.floor(y/size))%colors.length;
+        const offset=(Math.floor(y/size)%2)*(size/2);
+        ctx.fillStyle=colors[idx];ctx.fillRect(x+offset,y,size,size);
+        ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.strokeRect(x+offset,y,size,size);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

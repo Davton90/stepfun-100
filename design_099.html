@@ -1,0 +1,54 @@
+<!-- Design: Indian Mandala | Unique approach: rich saffron/maroon/gold spinning mandala -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Mandala</title>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Yatra One',cursive;background:#1a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;z-index:2;color:#d4af37;letter-spacing:.5em;text-shadow:0 0 20px rgba(212,175,55,.5)}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#8b0000;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">MANDALA</div>
+<div class="hint">click to expand petals</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,petals=8,targetPetals=8;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>{targetPetals=targetPetals===8?16:targetPetals===16?24:8});
+  let t=0;
+  function draw(){
+    t+=.01;
+    petals+=(targetPetals-petals)*.05;
+    ctx.fillStyle='#1a0a0a';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);ctx.rotate(t*.2);
+    // Outer petals
+    for(let i=0;i<petals;i++){
+      const a=(i/petals)*Math.PI*2;
+      ctx.save();ctx.rotate(a);
+      const grad=ctx.createLinearGradient(0,0,200,0);
+      grad.addColorStop(0,'#8b0000');grad.addColorStop(.5,'#d4af37');grad.addColorStop(1,'#8b0000');
+      ctx.fillStyle=grad;ctx.beginPath();ctx.ellipse(100,0,80,30,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
+    // Inner circle
+    const innerGrad=ctx.createRadialGradient(0,0,0,0,0,60);
+    innerGrad.addColorStop(0,'#d4af37');innerGrad.addColorStop(1,'#8b0000');
+    ctx.fillStyle=innerGrad;ctx.beginPath();ctx.arc(0,0,60,0,Math.PI*2);ctx.fill();
+    // Center dot
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,10,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

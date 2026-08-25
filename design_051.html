@@ -1,0 +1,54 @@
+<!-- Design: Minimalist Zen Garden | Unique approach: sand, stones, rake lines with click to place stone -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimalist Zen Garden</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Serif JP',serif;background:#f0ead6;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.8rem;font-weight:200;z-index:2;color:#5a5a4a;letter-spacing:.5em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#8a8a7a;font-style:italic}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">禅</div>
+<div class="hint">click to place stone</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,stones=[];
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;draw()}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>{
+    stones.push({x:e.clientX,y:e.clientY,r:15+Math.random()*25});
+    draw();
+  });
+  function drawRakeLines(){
+    ctx.strokeStyle='#d4c5a9';ctx.lineWidth=1.5;
+    for(let y=50;y<h-50;y+=12){
+      ctx.beginPath();ctx.moveTo(0,y);
+      for(let x=0;x<w;x+=20){
+        const wave=Math.sin(x*.01+y*.05)*2;
+        ctx.lineTo(x,y+wave);
+      }
+      ctx.stroke();
+    }
+  }
+  function draw(){
+    ctx.fillStyle='#f0ead6';ctx.fillRect(0,0,w,h);
+    drawRakeLines();
+    stones.forEach(s=>{
+      ctx.fillStyle='#5a5a4a';ctx.beginPath();ctx.ellipse(s.x,s.y,s.r,s.r*.7,0,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#7a7a6a';ctx.beginPath();ctx.ellipse(s.x-s.r*.2,s.y-s.r*.2,s.r*.3,s.r*.2,-.3,0,Math.PI*2);ctx.fill();
+    });
+  }
+  // Initial stones
+  stones=[{x:w/3,y:h/2,r:30},{x:w/2,y:h/3,r:20},{x:w/1.5,y:h/2.5,r:25}];
+  draw();
+</script>
+</body>
+</html>

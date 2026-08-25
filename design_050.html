@@ -1,0 +1,44 @@
+<!-- Design: Op Art Illusion | Unique approach: black/white patterns creating wave distortion -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Op Art Illusion</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Grotesk',sans-serif;background:#fff;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;letter-spacing:.5em;mix-blend-mode:difference;color:#000}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">OPTICAL</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  function draw(){
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+    const time=Date.now()*.001;
+    for(let y=0;y<h;y+=8){
+      for(let x=0;x<w;x+=8){
+        const dx=(x/w-mouse.x)*2;
+        const dy=(y/h-mouse.y)*2;
+        const dist=Math.hypot(dx,dy);
+        const wave=Math.sin(dist*10-time*3)*.5+.5;
+        const size=4+wave*4;
+        ctx.fillStyle=wave>.5?'#000':'#fff';
+        ctx.fillRect(x+4-size/2,y+4-size/2,size,size);
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

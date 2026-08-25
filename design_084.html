@@ -1,0 +1,58 @@
+<!-- Design: Nanopunk Circuit | Unique approach: tiny circuit patterns connecting with mouse nodes -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nanopunk Circuit</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Share Tech Mono',monospace;background:#001a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.5rem;z-index:2;color:#00ff88;letter-spacing:.3em;text-shadow:0 0 10px #00ff88}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">NANOCIRCUIT</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  let nodes=[];
+  for(let i=0;i<20;i++)nodes.push({x:Math.random()*w,y:Math.random()*h});
+  addEventListener('click',e=>nodes.push({x:e.clientX,y:e.clientY}));
+  function draw(){
+    ctx.fillStyle='#001a0a';ctx.fillRect(0,0,w,h);
+    // Draw connections
+    nodes.forEach((n,i)=>{
+      nodes.forEach((m,j)=>{
+        if(i<j){
+          const dist=Math.hypot(n.x-m.x,n.y-m.y);
+          if(dist<150){
+            ctx.strokeStyle=`rgba(0,255,136,${1-dist/150})`;ctx.lineWidth=1;
+            ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();
+          }
+        }
+      });
+    });
+    // Draw nodes
+    nodes.forEach(n=>{
+      ctx.fillStyle='#00ff88';ctx.beginPath();ctx.arc(n.x,n.y,3,0,Math.PI*2);ctx.fill();
+    });
+    // Mouse connection
+    if(mouse.x>0){
+      nodes.forEach(n=>{
+        const dist=Math.hypot(n.x-mouse.x,n.y-mouse.y);
+        if(dist<200){ctx.strokeStyle=`rgba(0,255,136,${1-dist/200})`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(mouse.x,mouse.y);ctx.stroke()}
+      });
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

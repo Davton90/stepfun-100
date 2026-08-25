@@ -1,0 +1,45 @@
+<!-- Design: Land Art Earth | Unique approach: Nazca line patterns drawn on earth tones -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Land Art Earth</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Crimson Text',serif;background:#d4c5a9;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#5a4a3a;letter-spacing:.3em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#8a7a6a;font-style:italic}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">NAZCA LINES</div>
+<div class="hint">click and drag to draw earth art</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,drawing=false;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;redraw()}
+  resize();addEventListener('resize',resize);
+  let lines=[];
+  function redraw(){
+    ctx.fillStyle='#d4c5a9';ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='#8b7355';ctx.lineWidth=3;ctx.lineCap='round';
+    lines.forEach(line=>{
+      ctx.beginPath();ctx.moveTo(line[0].x,line[0].y);
+      for(let i=1;i<line.length;i++)ctx.lineTo(line[i].x,line[i].y);
+      ctx.stroke();
+    });
+  }
+  let currentLine=null;
+  canvas.addEventListener('mousedown',e=>{drawing=true;currentLine=[{x:e.clientX,y:e.clientY}]});
+  canvas.addEventListener('mousemove',e=>{if(drawing){currentLine.push({x:e.clientX,y:e.clientY});lines.push(currentLine);currentLine=[...currentLine];redraw()}});
+  canvas.addEventListener('mouseup',()=>drawing=false);
+  // Initial Nazca-style lines
+  lines=[[{x:100,y:h/2},{x:w-100,y:h/2}],[{x:w/2,y:100},{x:w/2,y:h-100}]];
+  redraw();
+</script>
+</body>
+</html>

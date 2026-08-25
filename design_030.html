@@ -1,0 +1,62 @@
+<!-- Design: Perlin Noise Terrain | Unique approach: scrolling wireframe terrain with elevation change -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perlin Noise Terrain</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'JetBrains Mono',monospace;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.8rem;font-weight:700;color:#0f0;z-index:2;letter-spacing:.3em;text-shadow:0 0 10px #0f0}
+  .hud{position:absolute;top:30px;right:30px;font-size:.7rem;color:#0f0;z-index:2;text-align:right;line-height:1.8}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">TERRAIN.EXE</div>
+<div class="hud"><div>ELEV: <span id="elev">128</span></div><div>MODE: WIREFRAME</div></div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,offset=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  // Simple pseudo-noise
+  function noise(x,z){return Math.sin(x*.1+z*.05)*.5+Math.sin(x*.3-z*.08)*.3+Math.cos(z*.15+x*.07)*.2}
+  function loop(){
+    offset+=.03;
+    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,w,h);
+    const cols=40,rows=20;
+    const cellW=w/cols,cellH=h/rows;
+    ctx.strokeStyle='#0f0';ctx.lineWidth=1;ctx.globalAlpha=.6;
+    const elevEl=document.getElementById('elev');
+    let avgElev=0;
+    for(let z=0;z<rows;z++){
+      ctx.beginPath();
+      for(let x=0;x<=cols;x++){
+        const elev=noise(x+offset*10,z+offset*5);
+        avgElev+=elev;
+        const px=x*cellW,py=h/2-elev*150-z*20;
+        x===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.stroke();
+    }
+    for(let x=0;x<cols;x++){
+      ctx.beginPath();
+      for(let z=0;z<=rows;z++){
+        const elev=noise(x+offset*10,z+offset*5);
+        const px=x*cellW,py=h/2-elev*150-z*20;
+        z===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    if(elevEl)elevEl.textContent=Math.floor(avgElev/(cols*rows)*255+128);
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

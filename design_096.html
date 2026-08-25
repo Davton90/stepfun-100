@@ -1,0 +1,47 @@
+<!-- Design: Aboriginal Dot Painting | Unique approach: earth tones dots forming dreamtime patterns -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aboriginal Dot Painting</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#d4c5a9;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#5a4a3a;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">DREAMTIME</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>dots.push({x:e.clientX,y:e.clientY}));
+  const colors=['#8b4513','#a0522d','#cd853f','#d2691e','#f4a460','#deb887'];
+  let dots=[];
+  function draw(){
+    ctx.fillStyle='#d4c5a9';ctx.fillRect(0,0,w,h);
+    // Central shape
+    ctx.fillStyle='#8b4513';ctx.beginPath();ctx.arc(w/2,h/2,60,0,Math.PI*2);ctx.fill();
+    dots.forEach(d=>{
+      const dist=Math.hypot(d.x-w/2,d.y-h/2);
+      const size=5+dist*.02;
+      ctx.fillStyle=colors[Math.floor(Math.random()*colors.length)];ctx.beginPath();ctx.arc(d.x,d.y,size,0,Math.PI*2);ctx.fill();
+    });
+    // Concentric circles
+    for(let r=30;r<200;r+=20){
+      ctx.strokeStyle='rgba(139,69,19,.3)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(w/2,h/2,r,0,Math.PI*2);ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  // Initial dots
+  for(let i=0;i<100;i++)dots.push({x:w/2+(Math.random()-.5)*300,y:h/2+(Math.random()-.5)*300});
+  draw();
+</script>
+</body>
+</html>

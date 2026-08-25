@@ -1,0 +1,34 @@
+<!-- Design: Art Deco Radiant Fan | Unique approach: symmetrical sunburst with gold gradients and hover reveal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art Deco Radiant Fan</title>
+<link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Poiret One',cursive;background:#0a0a0a;overflow:hidden;height:100vh;color:#d4af37}
+  .frame{position:relative;width:100%;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .sunburst{position:absolute;width:600px;height:600px;background:conic-gradient(from 0deg,transparent,#d4af37,transparent,#d4af37,transparent,#d4af37,transparent);opacity:.15;animation:spin 60s linear infinite;border-radius:50%}
+  .fan{position:absolute;width:500px;height:500px;background:repeating-conic-gradient(from 0deg,transparent 0deg 8deg,#d4af37 8deg 10deg,transparent 10deg 18deg,#0f3d3d 18deg 20deg);opacity:.3;animation:spin 40s linear infinite reverse;border-radius:50%}
+  .center{position:relative;z-index:2;text-align:center}
+  .title{font-size:4rem;color:#d4af37;text-shadow:0 0 20px rgba(212,175,55,.5);letter-spacing:.2em}
+  .subtitle{font-size:1.2rem;color:#0f3d3d;background:#d4af37;padding:8px 24px;display:inline-block;margin-top:20px;letter-spacing:.3em;text-transform:uppercase}
+  .hidden-pattern{position:absolute;inset:0;background:radial-gradient(circle,transparent 30%,rgba(212,175,55,.1) 70%);opacity:0;transition:opacity 1s}
+  .frame:hover .hidden-pattern{opacity:1}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="sunburst"></div>
+  <div class="fan"></div>
+  <div class="hidden-pattern"></div>
+  <div class="center">
+    <div class="title">ART DECO</div>
+    <div class="subtitle">Radiant elegance</div>
+  </div>
+</div>
+</body>
+</html>

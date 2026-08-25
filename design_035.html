@@ -1,0 +1,52 @@
+<!-- Design: ASCII Art Generator | Unique approach: text-to-ASCII conversion with typing -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCII Art Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Fira Code',monospace;background:#0a0a0a;color:#0f0;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:20px;font-size:1.2rem;z-index:2;letter-spacing:.3em}
+  .controls{position:absolute;bottom:20px;display:flex;gap:10px;z-index:2}
+  .controls input{padding:8px 12px;background:#111;border:1px solid #0f0;color:#0f0;font-family:inherit;font-size:.8rem}
+  .controls button{padding:8px 16px;background:#0f0;color:#000;border:none;font-family:inherit;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">ASCII GENERATOR</div>
+<div class="controls">
+  <input type="text" id="text" placeholder="Type text..." value="HELLO">
+  <button onclick="generate()">Generate</button>
+</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight;generate()}
+  resize();addEventListener('resize',resize);
+  const chars=' .:-=+*#%@';
+  function generate(){
+    const text=document.getElementById('text').value||'ASCII';
+    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,w,h);
+    ctx.font='12px monospace';ctx.fillStyle='#0f0';
+    const size=16;
+    const cols=Math.floor(w/size),rows=Math.floor(h/size);
+    for(let y=0;y<rows;y++){
+      for(let x=0;x<cols;x++){
+        const ci=Math.floor((Math.sin(x*.3+Date.now()*.001)*Math.cos(y*.2)+1)*chars.length/2)%chars.length;
+        ctx.fillText(chars[Math.max(0,Math.min(chars.length-1,ci))],x*size,y*size);
+      }
+    }
+    // Draw text in center
+    ctx.font='bold 40px monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+    const hue=(Date.now()*.05)%360;ctx.fillStyle=`hsl(${hue},100%,50%)`;
+    ctx.fillText(text,w/2,h/2);
+  }
+  setInterval(generate,100);
+</script>
+</body>
+</html>

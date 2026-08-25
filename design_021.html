@@ -1,0 +1,55 @@
+<!-- Design: CRT Terminal | Unique approach: green phosphor terminal with typing animation and scanlines -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRT Terminal</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Fira Code',monospace;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  .terminal{width:700px;max-width:90%;background:#0d1a0d;border:2px solid #1a3a1a;border-radius:10px;padding:20px;position:relative;box-shadow:0 0 40px rgba(0,255,0,.1),inset 0 0 60px rgba(0,0,0,.5)}
+  .terminal::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);pointer-events:none;z-index:2}
+  .header{color:#00ff41;font-size:.8rem;margin-bottom:15px;opacity:.7;border-bottom:1px solid #1a3a1a;padding-bottom:10px}
+  .output{color:#00ff41;font-size:.9rem;line-height:1.6;min-height:300px}
+  .cursor{display:inline-block;width:10px;height:1em;background:#00ff41;animation:blink 1s step-end infinite;vertical-align:text-bottom}
+  @keyframes blink{50%{opacity:0}}
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="header">TERMINAL v3.2.1 // CONNECTED // SECURE</div>
+  <div class="output" id="output"></div>
+</div>
+<script>
+  const output=document.getElementById('output');
+  const lines=[
+    '> initializing system...',
+    '> loading kernel modules... OK',
+    '> mounting file systems... OK',
+    '> establishing secure connection...',
+    '> encryption: AES-256-GCM',
+    '> authentication successful',
+    '> welcome, operator.',
+    '> type "help" for commands',
+    ''
+  ];
+  let lineIdx=0,charIdx=0;
+  function type(){
+    if(lineIdx<lines.length){
+      if(charIdx<lines[lineIdx].length){
+        output.innerHTML=lines.slice(0,lineIdx).join('<br>')+lines[lineIdx].substring(0,charIdx+1)+'<span class="cursor"></span>';
+        charIdx++;setTimeout(type,30+Math.random()*40);
+      }else{
+        output.innerHTML=lines.slice(0,lineIdx+1).join('<br>')+'<span class="cursor"></span>';
+        lineIdx++;charIdx=0;setTimeout(type,300);
+      }
+    }else{
+      output.innerHTML=lines.join('<br>')+'<span class="cursor"></span>';
+    }
+  }
+  type();
+</script>
+</body>
+</html>

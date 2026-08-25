@@ -1,0 +1,49 @@
+<!-- Design: Raypunk Light | Unique approach: light rays refracting through prism with mouse -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raypunk Light</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Orbitron',sans-serif;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#fff;letter-spacing:.5em;text-shadow:0 0 20px rgba(255,255,255,.5)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">PRISM</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  function draw(){
+    ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+    const cx=w/2,cy=h/2;
+    // Light source
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(100,cy,20,0,Math.PI*2);ctx.fill();
+    // Prism
+    const prismX=cx+(mouse.x-.5)*100;
+    const prismY=cy+(mouse.y-.5)*100;
+    ctx.fillStyle='rgba(255,255,255,.3)';ctx.beginPath();
+    ctx.moveTo(prismX,prismY-40);ctx.lineTo(prismX+35,prismY+30);ctx.lineTo(prismX-35,prismY+30);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=2;ctx.stroke();
+    // Rays
+    for(let i=0;i<7;i++){
+      const angle=-.5+i*.15;
+      const hue=i*30;
+      ctx.strokeStyle=`hsla(${hue},100%,60%,.8)`;ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(prismX,prismY+30);
+      ctx.lineTo(prismX+Math.cos(angle)*300,prismY+30+Math.sin(angle)*300);ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

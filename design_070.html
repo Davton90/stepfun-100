@@ -1,0 +1,55 @@
+<!-- Design: Net Art HTML | Unique approach: exposed HTML structure as art with code fragments -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Net Art HTML</title>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Fira Code',monospace;background:#0a0a0a;color:#0f0;overflow:hidden;height:100vh;padding:20px;font-size:.8rem;line-height:1.6}
+  .tag{color:#ff79c6}
+  .attr{color:#50fa7b}
+  .val{color:#f1fa8c}
+  .comment{color:#6272a4}
+  .highlight{background:rgba(0,255,0,.1);padding:2px 4px}
+</style>
+</head>
+<body>
+<pre>
+<span class="comment">&lt;!-- NET ART HTML — code as visual poetry --&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"en"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span><span class="highlight">&lt;code&gt;&lt;/code&gt;</span><span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+  <span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"art"</span><span class="tag">&gt;</span>
+      <span class="highlight">&lt;div&gt;&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;script&gt;</span>
+      <span class="highlight">const art = document.createElement('div');</span>
+      <span class="highlight">document.body.appendChild(art);</span>
+    <span class="tag">&lt;/script&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span>
+</pre>
+<script>
+  const fragments=['<canvas>','<svg>','<gl>','<vr>','<ar>','<ai>','<ml>','<web>'];
+  setInterval(()=>{
+    const frag=fragments[Math.floor(Math.random()*fragments.length)];
+    const el=document.createElement('span');
+    el.className='highlight';
+    el.textContent=frag;
+    el.style.position='absolute';
+    el.style.left=Math.random()*90+'%';
+    el.style.top=Math.random()*90+'%';
+    el.style.fontSize=(12+Math.random()*20)+'px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3000);
+  },500);
+</script>
+</body>
+</html>

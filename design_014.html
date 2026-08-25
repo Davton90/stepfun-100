@@ -1,0 +1,56 @@
+<!-- Design: Claymorphism Playground | Unique approach: chunky pastel blobs that bounce and squash -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claymorphism Playground</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Quicksand',sans-serif;background:#ffecd2;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:relative;z-index:2;font-size:2.2rem;font-weight:700;color:#5d4037;text-shadow:3px 3px 0 #ffab91;margin-bottom:20px}
+  .subtitle{position:relative;z-index:2;font-size:1rem;color:#8d6e63;font-weight:500}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">CLAY WORLD</div>
+<div class="subtitle">click to add clay blobs</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>clays.push(new Clay(e.clientX,e.clientY)));
+  class Clay{
+    constructor(x,y){this.x=x;this.y=y;this.r=25+Math.random()*40;this.vx=(Math.random()-.5)*4;this.vy=(Math.random()-.5)*4;this.squash=1;this.color=['#ffab91','#ffcc80','#c5e1a5','#80deea','#ce93d8'][Math.floor(Math.random()*5)]}
+    update(){
+      this.x+=this.vx;this.y+=this.vy;this.vy+=.4;
+      if(this.x<this.r){this.x=this.r;this.vx*=-1;this.squash=.7}
+      if(this.x>w-this.r){this.x=w-this.r;this.vx*=-1;this.squash=.7}
+      if(this.y>h-this.r){this.y=h-this.r;this.vy*=-.8;this.squash=.6}
+      this.squash+=(1-this.squash)*.1;
+    }
+    draw(){
+      ctx.save();ctx.translate(this.x,this.y);
+      const sx=this.squash,sy=2-this.squash;
+      ctx.scale(sx,sy);
+      ctx.fillStyle=this.color;
+      ctx.beginPath();ctx.arc(0,0,this.r,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.3)';
+      ctx.beginPath();ctx.arc(-this.r*.3,-this.r*.3,this.r*.3,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }
+  }
+  let clays=Array.from({length:8},()=>new Clay(Math.random()*w,Math.random()*h));
+  function loop(){
+    ctx.fillStyle='rgba(255,236,210,.2)';ctx.fillRect(0,0,w,h);
+    clays.forEach(c=>{c.update();c.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!-- Design: Retro Computer Desktop | Unique approach: Win95-style draggable windows -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retro Computer Desktop</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'VT323',monospace;background:#008080;overflow:hidden;height:100vh;position:relative}
+  .desktop{position:absolute;inset:0;padding:10px;display:flex;flex-direction:column;gap:10px;flex-wrap:wrap;align-content:flex-start}
+  .icon{width:70px;height:70px;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;font-size:.7rem;color:#000;text-align:center;padding:5px}
+  .icon:active{border-color:#808080 #fff #fff #808080}
+  .icon-img{width:32px;height:32px;background:#000;margin-bottom:5px;border:1px solid #808080}
+  .window{position:absolute;width:250px;background:#c0c0c0;border:2px solid;border-color:#fff #808080 #808080 #fff;box-shadow:2px 2px 0 #000;min-height:150px;display:none;flex-direction:column}
+  .window.open{display:flex}
+  .title-bar{background:#000080;color:#fff;padding:4px 8px;display:flex;justify-content:space-between;align-items:center;font-size:.9rem;cursor:move;user-select:none}
+  .close-btn{width:16px;height:16px;background:#c0c0c0;border:1px solid;border-color:#fff #808080 #808080 #fff;color:#000;font-size:.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .window-body{padding:10px;flex:1;font-size:.8rem;color:#000;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="desktop">
+  <div class="icon" ondblclick="openWin('win1')"><div class="icon-img"></div>My PC</div>
+  <div class="icon" ondblclick="openWin('win2')"><div class="icon-img"></div>Notepad</div>
+  <div class="icon" ondblclick="openWin('win3')"><div class="icon-img"></div>Recycle</div>
+</div>
+<div class="window open" id="win1" style="top:50px;left:100px">
+  <div class="title-bar"><span>My Computer</span><div class="close-btn" onclick="closeWin('win1')">×</div></div>
+  <div class="window-body">C: Local Disk (2.1GB free)<br>D: CD-ROM<br>E: Network</div>
+</div>
+<div class="window" id="win2" style="top:120px;left:200px">
+  <div class="title-bar"><span>Notepad</span><div class="close-btn" onclick="closeWin('win2')">×</div></div>
+  <div class="window-body">Welcome to RetroOS 95.<br>Double-click icons to open.<br>Drag windows to move.</div>
+</div>
+<div class="window" id="win3" style="top:200px;left:300px">
+  <div class="title-bar"><span>Recycle Bin</span><div class="close-btn" onclick="closeWin('win3')">×</div></div>
+  <div class="window-body">Empty</div>
+</div>
+<script>
+  function openWin(id){document.getElementById(id).classList.add('open')}
+  function closeWin(id){document.getElementById(id).classList.remove('open')}
+  document.querySelectorAll('.window').forEach(win=>{
+    const bar=win.querySelector('.title-bar');
+    bar.addEventListener('mousedown',e=>{
+      const startX=e.clientX-win.offsetLeft,startY=e.clientY-win.offsetTop;
+      function move(ev){win.style.left=ev.clientX-startX+'px';win.style.top=ev.clientY-startY+'px'}
+      function up(){document.removeEventListener('mousemove',move);document.removeEventListener('mouseup',up)}
+      document.addEventListener('mousemove',move);document.addEventListener('mouseup',up);
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!-- Design: Halftone Dot Field | Unique approach: CMYK dots with hover ripple effect -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Halftone Dot Field</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Oswald',sans-serif;background:#f5f5f5;overflow:hidden;height:100vh;color:#000;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;width:100%;text-align:center;font-size:3rem;font-weight:700;z-index:2;letter-spacing:.2em;mix-blend-mode:multiply}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">HALFTONE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999};
+  const spacing=18;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  function draw(){
+    ctx.fillStyle='#f5f5f5';ctx.fillRect(0,0,w,h);
+    const colors=['#00ffff','#ff00ff','#ffff00','#000000'];
+    for(let y=0;y<h;y+=spacing){
+      for(let x=0;x<w;x+=spacing){
+        const dx=x-mouse.x,dy=y-mouse.y,dist=Math.hypot(dx,dy);
+        const ripple=dist<200?Math.sin(dist*.05)*10:0;
+        const baseR=spacing*.4;
+        const r=Math.max(1,baseR+ripple);
+        const ci=((Math.floor(x/spacing)+Math.floor(y/spacing))%4);
+        ctx.fillStyle=colors[ci];ctx.globalAlpha=.8;
+        ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+      }
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

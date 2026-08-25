@@ -1,0 +1,48 @@
+<!-- Design: Seapunk Ocean | Unique approach: pixelated sea creatures rising with retro font -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seapunk Ocean</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Press Start 2P',cursive;background:#001a33;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.5rem;z-index:2;color:#00ffff;text-shadow:0 0 15px #00ffff;letter-spacing:.3em}
+  .hint{position:absolute;bottom:30px;font-size:.6rem;z-index:2;color:#ff00de;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">SEAPUNK</div>
+<div class="hint">click to create wave</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>bubbles.push(new Bubble(e.clientX,e.clientY)));
+  class Bubble{
+    constructor(x,y){this.x=x;this.y=y;this.size=0;this.targetSize=10+Math.random()*30;this.vy=-1-Math.random()*2;this.color=['#00ffff','#ff00de','#0088ff','#00ff88'][Math.floor(Math.random()*4)]}
+    update(){this.y+=this.vy;this.size+=(this.targetSize-this.size)*.05}
+    draw(){ctx.fillStyle=this.color;ctx.globalAlpha=.6;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
+  }
+  let bubbles=Array.from({length:20},()=>new Bubble(Math.random()*w,Math.random()*h));
+  function loop(){
+    ctx.fillStyle='#001a33';ctx.fillRect(0,0,w,h);
+    // Pixelated seaweed
+    for(let i=0;i<10;i++){
+      const x=i*(w/10)+25;
+      for(let j=0;j<10;j++){
+        ctx.fillStyle=j%2?'#004488':'#0066aa';ctx.fillRect(x,h-j*15-20,50,15);
+      }
+    }
+    bubbles.forEach(b=>{b.update();b.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

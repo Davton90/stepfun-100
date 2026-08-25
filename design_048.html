@@ -1,0 +1,50 @@
+<!-- Design: Memphis Design Playground | Unique approach: bright bouncing shapes with click addition -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memphis Design Playground</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Mono+One&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rubik Mono One',sans-serif;background:#ffeb3b;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2.5rem;z-index:2;color:#ff0080;text-shadow:3px 3px 0 #00ffff;transform:rotate(-3deg)}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#333;background:#fff;padding:5px 15px;border:2px solid #000}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">MEMPHIS!</div>
+<div class="hint">CLICK TO ADD SHAPES</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>shapes.push(new Shape(e.clientX,e.clientY)));
+  const colors=['#ff0080','#00ffff','#ffeb3b','#ff8800','#8800ff','#00ff00'];
+  class Shape{
+    constructor(x,y){this.x=x;this.y=y;this.type=Math.floor(Math.random()*4);this.size=20+Math.random()*40;this.rot=Math.random()*Math.PI*2;this.vx=(Math.random()-.5)*3;this.vy=(Math.random()-.5)*3;this.color=colors[Math.floor(Math.random()*colors.length)]}
+    update(){this.x+=this.vx;this.y+=this.vy;this.rot+=.02;if(this.x<0||this.x>w)this.vx*=-1;if(this.y<0||this.y>h)this.vy*=-1}
+    draw(){
+      ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.rot);
+      ctx.fillStyle=this.color;ctx.strokeStyle='#000';ctx.lineWidth=2;
+      if(this.type===0){ctx.fillRect(-this.size/2,-this.size/2,this.size,this.size);ctx.strokeRect(-this.size/2,-this.size/2,this.size,this.size)}
+      else if(this.type===1){ctx.beginPath();ctx.arc(0,0,this.size/2,0,Math.PI*2);ctx.fill();ctx.stroke()}
+      else if(this.type===2){ctx.beginPath();ctx.moveTo(0,-this.size/2);ctx.lineTo(this.size/2,this.size/2);ctx.lineTo(-this.size/2,this.size/2);ctx.closePath();ctx.fill();ctx.stroke()}
+      else{ctx.beginPath();ctx.moveTo(0,-this.size/2);ctx.quadraticCurveTo(this.size/2,0,0,this.size/2);ctx.quadraticCurveTo(-this.size/2,0,0,-this.size/2);ctx.fill();ctx.stroke()}
+      ctx.restore();
+    }
+  }
+  let shapes=Array.from({length:15},()=>new Shape(Math.random()*w,Math.random()*h));
+  function loop(){
+    ctx.fillStyle='rgba(255,235,59,.1)';ctx.fillRect(0,0,w,h);
+    shapes.forEach(s=>{s.update();s.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

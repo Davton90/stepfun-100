@@ -1,0 +1,48 @@
+<!-- Design: Futurist Speed | Unique approach: dynamic motion lines streaking across with mouse speed -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Futurist Speed</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Orbitron',sans-serif;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:3rem;font-weight:900;color:#fff;z-index:2;letter-spacing:.5em;text-shadow:0 0 30px rgba(255,255,255,.5);mix-blend-mode:difference}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">VELOCITY</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouseSpeed=0,lastX=0,lastY=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{const dx=e.clientX-lastX,dy=e.clientY-lastY;mouseSpeed=Math.hypot(dx,dy);lastX=e.clientX;lastY=e.clientY});
+  let lines=[];
+  function loop(){
+    // Trail
+    ctx.fillStyle='rgba(0,0,0,.1)';ctx.fillRect(0,0,w,h);
+    // Add lines
+    if(mouseSpeed>5){
+      for(let i=0;i<Math.min(10,mouseSpeed/2);i++){
+        lines.push({x:Math.random()*w,y:Math.random()*h,length:50+mouseSpeed*3,speed:5+mouseSpeed*.5,alpha:1,color:`hsl(${Math.random()*60+180},100%,60%)`});
+      }
+    }
+    lines.forEach(l=>{
+      l.x-=l.speed;l.alpha-=.02;
+      ctx.strokeStyle=l.color;ctx.globalAlpha=Math.max(0,l.alpha);ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(l.x,l.y);ctx.lineTo(l.x+l.length,l.y);ctx.stroke();
+    });
+    lines=lines.filter(l=>l.alpha>0&&l.x>-l.length);
+    ctx.globalAlpha=1;
+    mouseSpeed*=.9;
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

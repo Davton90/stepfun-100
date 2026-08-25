@@ -1,0 +1,60 @@
+<!-- Design: Organic Blob Garden | Unique approach: merging gradient blobs with drag interaction -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organic Blob Garden</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:#fff5f5;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:relative;z-index:2;font-size:2.5rem;font-weight:700;color:#6b4c4c;text-shadow:2px 2px 0 #ffb7b2}
+  .subtitle{position:relative;z-index:2;font-size:1rem;color:#9e7a7a;margin-top:10px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">BLOB GARDEN</div>
+<div class="subtitle">drag to move blobs around</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,drag=null,offset={x:0,y:0};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  class Blob{
+    constructor(x,y,r,color){this.x=x;this.y=y;this.r=r;this.baseR=r;this.color=color;this.vx=0;this.vy=0;this.phase=Math.random()*Math.PI*2}
+    update(){
+      this.phase+=.02;
+      this.r=this.baseR+Math.sin(this.phase)*10;
+      if(drag!==this){this.x+=this.vx;this.y+=this.vy;this.vx*=.95;this.vy*=.95}
+    }
+    draw(){
+      const grad=ctx.createRadialGradient(this.x-this.r*.2,this.y-this.r*.2,this.r*.1,this.x,this.y,this.r);
+      grad.addColorStop(0,'rgba(255,255,255,.4)');grad.addColorStop(1,this.color);
+      ctx.fillStyle=grad;ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();
+    }
+  }
+  const blobs=[
+    new Blob(w*.3,h*.4,80,'rgba(255,183,178,.8)'),
+    new Blob(w*.6,h*.5,100,'rgba(255,218,193,.8)'),
+    new Blob(w*.5,h*.3,70,'rgba(255,200,200,.8)')
+  ];
+  canvas.addEventListener('mousedown',e=>{
+    const x=e.clientX,y=e.clientY;
+    blobs.forEach(b=>{if(Math.hypot(b.x-x,b.y-y)<b.r){drag=b;offset.x=x-b.x;offset.y=y-b.y}});
+  });
+  addEventListener('mousemove',e=>{
+    if(drag){drag.x=e.clientX-offset.x;drag.y=e.clientY-offset.y}
+  });
+  addEventListener('mouseup',()=>drag=null);
+  function loop(){
+    ctx.fillStyle='rgba(255,245,245,.15)';ctx.fillRect(0,0,w,h);
+    blobs.forEach(b=>{b.update();b.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

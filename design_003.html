@@ -1,0 +1,72 @@
+<!-- Design: Art Nouveau Flowing Line | Unique approach: bezier flowing curves with mouse ripple interaction -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Art Nouveau Flowing Line</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cormorant Garamond',serif;background:#f7f3e9;overflow:hidden;height:100vh;color:#4a5d4a}
+  canvas{display:block;width:100%;height:100%}
+  .overlay{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);text-align:center;z-index:2;pointer-events:none}
+  .title{font-size:3rem;font-weight:300;font-style:italic;color:#6b7f6b;letter-spacing:.1em}
+  .subtitle{font-size:1rem;opacity:.7;margin-top:8px;letter-spacing:.3em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="overlay">
+  <div class="title">Art Nouveau</div>
+  <div class="subtitle">Flowing organic beauty</div>
+</div>
+<script>
+  const canvas=document.getElementById('canvas');
+  const ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize(); addEventListener('resize',resize);
+  let mouse={x:w/2,y:h/2};
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  class Ribbon{
+    constructor(){this.t=[];this.color=['#8a9a7b','#c4a77d','#d4b896','#a3b18a'][Math.floor(Math.random()*4)]}
+    init(){
+      this.t=[];
+      for(let i=0;i<6;i++) this.t.push({x:w/2,y:h/2,ox:w/2,oy:h/2,vx:0,vy:0});
+    }
+    update(){
+      const head=this.t[0];
+      head.x+=(mouse.x-head.x)*.02;
+      head.y+=(mouse.y-head.y)*.02;
+      for(let i=1;i<this.t.length;i++){
+        const p=this.t[i], prev=this.t[i-1];
+        p.x+=(prev.x-p.x)*.3;
+        p.y+=(prev.y-p.y)*.3;
+      }
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.moveTo(this.t[0].x,this.t[0].y);
+      for(let i=1;i<this.t.length-1;i++){
+        const xc=(this.t[i].x+this.t[i+1].x)/2;
+        const yc=(this.t[i].y+this.t[i+1].y)/2;
+        ctx.quadraticCurveTo(this.t[i].x,this.t[i].y,xc,yc);
+      }
+      ctx.strokeStyle=this.color;
+      ctx.lineWidth=3;
+      ctx.stroke();
+    }
+  }
+  const ribbons=[new Ribbon(),new Ribbon(),new Ribbon()];
+  ribbons.forEach(r=>r.init());
+  function loop(){
+    ctx.fillStyle='rgba(247,243,233,.08)';
+    ctx.fillRect(0,0,w,h);
+    ribbons.forEach(r=>{r.update();r.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

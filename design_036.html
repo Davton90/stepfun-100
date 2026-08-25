@@ -1,0 +1,36 @@
+<!-- Design: Variable Fonts Playground | Unique approach: single font axes with sliders and transitions -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variable Fonts Playground</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#f5f5f5;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .preview{font-size:6rem;font-weight:700;transition:font-weight .3s ease;text-align:center;color:#111;line-height:1.2}
+  .controls{position:absolute;bottom:40px;display:flex;gap:30px;flex-wrap:wrap;justify-content:center;max-width:600px}
+  .control{display:flex;flex-direction:column;gap:8px;min-width:150px}
+  .control label{font-size:.75rem;color:#666;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+  input[type="range"]{-webkit-appearance:none;width:100%;height:6px;background:#ddd;border-radius:3px;outline:none}
+  input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:#111;border-radius:50%;cursor:pointer}
+  .title{position:absolute;top:30px;font-size:1rem;color:#999;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<div class="title">VARIABLE FONTS</div>
+<div class="preview" id="preview">Typography</div>
+<div class="controls">
+  <div class="control"><label>Weight: <span id="wVal">700</span></label><input type="range" id="weight" min="100" max="900" value="700"></div>
+  <div class="control"><label>Size: <span id="sVal">6</span>rem</label><input type="range" id="size" min="2" max="10" value="6"></div>
+</div>
+<script>
+  const preview=document.getElementById('preview');
+  const weight=document.getElementById('weight'),size=document.getElementById('size');
+  const wVal=document.getElementById('wVal'),sVal=document.getElementById('sVal');
+  function update(){preview.style.fontWeight=weight.value;preview.style.fontSize=size.value+'rem';wVal.textContent=weight.value;sVal.textContent=size.value}
+  weight.addEventListener('input',update);size.addEventListener('input',update);
+</script>
+</body>
+</html>

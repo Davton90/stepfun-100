@@ -1,0 +1,42 @@
+<!-- Design: Conceptual Word Art | Unique approach: text as only visual forming shapes -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conceptual Word Art</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff}
+  .word{font-size:1rem;font-weight:200;position:absolute;opacity:.8;transition:all 1s ease;white-space:nowrap;letter-spacing:.2em}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1rem;z-index:2;opacity:.3;letter-spacing:.5em}
+</style>
+</head>
+<body>
+<div class="title">WORD AS FORM</div>
+<script>
+  const words=['LOVE','HATE','PEACE','WAR','LIGHT','DARK','LIFE','DEATH','HOPE','FEAR','JOY','PAIN'];
+  const colors=['#ff0080','#00ffff','#ffff00','#ff8800','#00ff00','#8800ff'];
+  const container=document.body;
+  words.forEach((word,i)=>{
+    const el=document.createElement('div');el.className='word';
+    el.textContent=word;
+    el.style.color=colors[i%colors.length];
+    el.style.left=Math.random()*80+'%';
+    el.style.top=Math.random()*80+'%';
+    el.style.fontSize=(10+Math.random()*30)+'px';
+    el.style.fontWeight=Math.random()>.5?'900':'200';
+    container.appendChild(el);
+  });
+  document.addEventListener('mousemove',e=>{
+    document.querySelectorAll('.word').forEach(el=>{
+      const dx=e.clientX-parseFloat(el.style.left);
+      const dy=e.clientY-parseFloat(el.style.top);
+      el.style.transform=`translate(${dx*.02}px,${dy*.02}px)`;
+      el.style.opacity=.3+Math.abs(Math.sin(Date.now()*.001+parseFloat(el.style.left)))*.7;
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!-- Design: Celtic Knotwork | Unique approach: green/silver/stone interlace patterns -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Celtic Knotwork</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cinzel',serif;background:#1a3a2a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#c0c0c0;letter-spacing:.5em;text-shadow:0 0 15px rgba(192,192,192,.3)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">KELTIC KNOT</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',generate);
+  let t=0;
+  function drawKnot(x,y,size){
+    ctx.strokeStyle='#c0c0c0';ctx.lineWidth=3;
+    ctx.beginPath();
+    for(let i=0;i<8;i++){
+      const a=(i/8)*Math.PI*2;
+      const px=x+Math.cos(a)*size;const py=y+Math.sin(a)*size;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();ctx.stroke();
+    ctx.beginPath();
+    for(let i=0;i<8;i++){
+      const a=(i/8)*Math.PI*2+Math.PI/8;
+      const px=x+Math.cos(a)*size*.5;const py=y+Math.sin(a)*size*.5;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();ctx.stroke();
+  }
+  function generate(){
+    ctx.fillStyle='#1a3a2a';ctx.fillRect(0,0,w,h);
+    for(let y=0;y<h;y+=80){
+      for(let x=0;x<w;x+=80){
+        drawKnot(x,y,30);
+      }
+    }
+  }
+  generate();
+  function loop(){requestAnimationFrame(loop)}
+  loop();
+</script>
+</body>
+</html>

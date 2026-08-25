@@ -1,0 +1,56 @@
+<!-- Design: L-System Garden | Unique approach: fractal trees that grow slowly with click to replant -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L-System Garden</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cormorant Garamond',serif;background:#1a0f0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:300;font-style:italic;z-index:2;color:#c4a77d;letter-spacing:.3em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;color:#8b6f47;z-index:2;font-style:italic}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">Fractal Garden</div>
+<div class="hint">click to plant new tree</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>trees.push(new Tree(e.clientX,h-e.clientX*.1)));
+  class Tree{
+    constructor(x,y){this.x=x;this.y=y;this.growth=0;this.maxGrowth=6+Math.random()*4;this.color=`hsl(${30+Math.random()*20},${40+Math.random()*20}%,${25+Math.random()*15}%)`;this.angle=Math.random()*Math.PI*.1-.05}
+    update(){if(this.growth<this.maxGrowth)this.growth+=.02}
+    draw(){
+      ctx.save();ctx.translate(this.x,this.y);
+      this.branch(0,0,-Math.PI/2+this.angle,60,this.growth);
+      ctx.restore();
+    }
+    branch(x,y,angle,length,depth){
+      if(depth<=0)return;
+      const ex=x+Math.cos(angle)*length;
+      const ey=y+Math.sin(angle)*length;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(ex,ey);
+      ctx.strokeStyle=this.color;ctx.lineWidth=depth*.8;ctx.stroke();
+      if(depth<3){ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);ctx.fill()}
+      const spread=.4+Math.random()*.1;
+      this.branch(ex,ey,angle-spread,length*.7,depth-1);
+      this.branch(ex,ey,angle+spread,length*.7,depth-1);
+    }
+  }
+  let trees=[new Tree(w/2,50)];
+  function loop(){
+    ctx.fillStyle='rgba(26,15,10,.05)';ctx.fillRect(0,0,w,h);
+    trees.forEach(t=>{t.update();t.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

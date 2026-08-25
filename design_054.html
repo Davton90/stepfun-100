@@ -1,0 +1,35 @@
+<!-- Design: Skeuomorphic Texture | Unique approach: leather/wood textures with pressable buttons -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skeuomorphic Texture</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Crimson Text',serif;background:linear-gradient(135deg,#3e2723,#5d4037);overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  .device{width:320px;background:linear-gradient(145deg,#6d4c41,#4e342e);border-radius:20px;padding:30px;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.1)}
+  .screen{background:linear-gradient(180deg,#ffecb3,#ffca28);border-radius:10px;padding:20px;text-align:center;margin-bottom:20px;box-shadow:inset 0 2px 5px rgba(0,0,0,.2);border:3px solid #3e2723}
+  .screen h2{color:#3e2723;font-size:1.5rem;margin-bottom:5px}
+  .screen p{color:#5d4037;font-size:.9rem}
+  .dial{width:80px;height:80px;background:radial-gradient(circle at 30% 30%,#8d6e63,#4e342e);border-radius:50%;margin:0 auto 20px;border:4px solid #3e2723;box-shadow:0 4px 10px rgba(0,0,0,.3),inset 0 2px 5px rgba(255,255,255,.1);cursor:pointer;position:relative}
+  .dial::after{content:'';position:absolute;top:50%;left:50%;width:4px;height:30px;background:#ffeb3b;transform-origin:bottom center;transform:translate(-50%,-100%) rotate(0deg);border-radius:2px}
+  .dial:active{transform:scale(.95)}
+  .btn{width:100%;padding:15px;background:linear-gradient(180deg,#8d6e63,#6d4c41);border:2px solid #3e2723;color:#ffecb3;font-family:inherit;font-size:1rem;font-weight:700;border-radius:10px;cursor:pointer;box-shadow:0 4px 0 #3e2723,0 6px 10px rgba(0,0,0,.3);transition:all .1s}
+  .btn:active{transform:translateY(4px);box-shadow:0 0 0 #3e2723,0 2px 5px rgba(0,0,0,.3)}
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="screen"><h2>Radio</h2><p>FM 98.7 MHz</p></div>
+  <div class="dial" id="dial"></div>
+  <button class="btn" onclick="this.style.transform='translateY(4px)'">PLAY</button>
+</div>
+<script>
+  const dial=document.getElementById('dial');
+  let rot=0;
+  dial.addEventListener('click',()=>{rot+=45;dial.style.transform=`rotate(${rot}deg)`});
+</script>
+</body>
+</html>

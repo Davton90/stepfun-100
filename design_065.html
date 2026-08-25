@@ -1,0 +1,41 @@
+<!-- Design: Color Field | Unique approach: large solid color blocks shifting slowly -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Field</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;width:100%;text-align:center;font-size:1.5rem;font-weight:200;z-index:2;color:rgba(0,0,0,.3);letter-spacing:.5em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">COLOR FIELD</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>{
+    fields.push({x:e.clientX-w/2,y:e.clientY-h/2,r:0,maxR:200+Math.random()*200,hue:Math.random()*360});
+  });
+  let fields=[{x:w/2,y:h/2,r:0,maxR:300,hue:200},{x:-w/3,y:-h/3,r:0,maxR:250,hue:340},{x:w/3,y:h/3,r:0,maxR:200,hue:30}];
+  function loop(){
+    ctx.fillStyle='#f0f0f0';ctx.fillRect(0,0,w,h);
+    fields.forEach(f=>{
+      f.r+=(f.maxR-f.r)*.02;
+      const grad=ctx.createRadialGradient(f.x+w/2,f.y+h/2,0,f.x+w/2,f.y+h/2,f.r);
+      grad.addColorStop(0,`hsla(${f.hue},80%,60%,.8)`);grad.addColorStop(1,`hsla(${f.hue},80%,60%,0)`);
+      ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

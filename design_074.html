@@ -1,0 +1,57 @@
+<!-- Design: Witch House Ritual | Unique approach: occult symbols rotating with click to cast spell -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Witch House Ritual</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cinzel Decorative',serif;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#8b00ff;text-shadow:0 0 30px rgba(139,0,255,.7);letter-spacing:.5em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:rgba(139,0,255,.6);letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">RITUAL</div>
+<div class="hint">click to cast spell</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,t=0,casting=false,castTimer=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>{casting=true;castTimer=60});
+  function drawPentagram(cx,cy,r,rot){
+    ctx.beginPath();
+    for(let i=0;i<5;i++){
+      const a=(i/5)*Math.PI*2-Math.PI/2+rot;
+      const x=cx+Math.cos(a)*r;const y=cy+Math.sin(a)*r;
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      const a2=((i+2)/5)*Math.PI*2-Math.PI/2+rot;
+      ctx.lineTo(cx+Math.cos(a2)*r*.4,cy+Math.sin(a2)*r*.4);
+    }
+    ctx.closePath();ctx.strokeStyle='#8b00ff';ctx.lineWidth=3;ctx.stroke();
+  }
+  function loop(){
+    t+=.01;
+    ctx.fillStyle='rgba(10,10,10,.1)';ctx.fillRect(0,0,w,h);
+    if(casting){
+      castTimer--;
+      ctx.globalAlpha=castTimer/60;
+      for(let i=0;i<5;i++){
+        drawPentagram(w/2,h/2,100+i*30,t+i);
+      }
+      ctx.globalAlpha=1;
+      if(castTimer<=0)casting=false;
+    }else{
+      drawPentagram(w/2,h/2,80,t);
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

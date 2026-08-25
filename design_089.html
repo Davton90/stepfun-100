@@ -1,0 +1,49 @@
+<!-- Design: Steampunk Gears | Unique approach: brass/copper interlocking gears with mouse turn -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steampunk Gears</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rajdhani',sans-serif;background:#1a0f05;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#d4a574;letter-spacing:.5em;text-shadow:0 0 20px rgba(212,165,116,.3)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">STEAMWORKS</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouseSpeed=0,lastX=0,lastY=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{const dx=e.clientX-lastX,dy=e.clientY-lastY;mouseSpeed=Math.hypot(dx,dy);lastX=e.clientX;lastY=e.clientY});
+  const gears=[{x:w/2,y:h/2,r:100,teeth:16,rot:0,speed:.01},{x:w/2-120,y:h/2-80,r:60,teeth:10,rot:0,speed:-.02},{x:w/2+120,y:h/2-80,r:60,teeth:10,rot:0,speed:-.02},{x:w/2-80,y:h/2+100,r:70,teeth:12,rot:0,speed:.015}];
+  function drawGear(g){
+    ctx.save();ctx.translate(g.x,g.y);ctx.rotate(g.rot);
+    ctx.fillStyle='#8b6f47';ctx.strokeStyle='#5a4a30';ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let i=0;i<g.teeth*2;i++){
+      const a=(i/(g.teeth*2))*Math.PI*2;const r2=i%2===0?g.r:g.r*.75;
+      const px=Math.cos(a)*r2;const py=Math.sin(a)*r2;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillStyle='#5a4a30';ctx.beginPath();ctx.arc(0,0,g.r*.3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+  function loop(){
+    ctx.fillStyle='#1a0f05';ctx.fillRect(0,0,w,h);
+    const speed=mouseSpeed*.01;
+    gears.forEach(g=>{g.rot+=g.speed+speed;drawGear(g)});
+    mouseSpeed*=.95;
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

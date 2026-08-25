@@ -1,0 +1,60 @@
+<!-- Design: Hacker Matrix Rain | Unique approach: falling character columns with mouse disturbance -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker Matrix Rain</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Share Tech Mono',monospace;background:#000;overflow:hidden;height:100vh}
+  canvas{display:block;position:absolute;inset:0}
+  .overlay{position:absolute;top:20px;left:20px;color:#0f0;font-size:.75rem;z-index:2;opacity:.6;line-height:1.8}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="overlay">
+  <div>ROOT@MATRIX:~$ ./init.sh</div>
+  <div>Loading streams...</div>
+  <div>Neural link: ACTIVE</div>
+</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*<>{}[]';
+  const fontSize=14;
+  let columns=[];
+  function init(){
+    columns=[];
+    const cols=Math.floor(w/fontSize);
+    for(let i=0;i<cols;i++)columns.push({x:i*fontSize,y:Math.random()*-h,speed:2+Math.random()*3,chars:Array.from({length:25},()=>chars[Math.floor(Math.random()*chars.length)])});
+  }
+  init();addEventListener('resize',init);
+  function draw(){
+    ctx.fillStyle='rgba(0,0,0,.05)';ctx.fillRect(0,0,w,h);
+    ctx.font=`bold ${fontSize}px monospace`;
+    columns.forEach(col=>{
+      col.y+=col.speed;
+      const dx=col.x-mouse.x,dy=col.y*25-mouse.y,dist=Math.hypot(dx,dy);
+      if(dist<150&&dist>0){col.speed=10;col.chars=Array.from({length:25},()=>chars[Math.floor(Math.random()*chars.length)])}
+      else if(col.speed>3)col.speed*=.95;
+      if(col.y>h){col.y=-500;col.speed=2+Math.random()*3}
+      col.chars.forEach((ch,i)=>{
+        const y=col.y+i*fontSize;
+        if(y>0&&y<h){
+          ctx.fillStyle=i===0?'#fff':i<3?'#0f0':'rgba(0,255,0,.6)';
+          ctx.fillText(ch,col.x,y);
+        }
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

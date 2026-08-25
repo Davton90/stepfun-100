@@ -1,0 +1,52 @@
+<!-- Design: Clockwork Mechanism | Unique approach: brass/steel clockwork ticking with mouse wind -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clockwork Mechanism</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Orbitron',sans-serif;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.8rem;font-weight:700;z-index:2;color:#d4a574;letter-spacing:.5em;text-shadow:0 0 15px rgba(212,165,116,.4)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">CLOCKWORK</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouseAngle=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{const dx=e.clientX-w/2,dy=e.clientY-h/2;mouseAngle=Math.atan2(dy,dx)});
+  let t=0;
+  function draw(){
+    t+=.016;
+    ctx.fillStyle='#0a0a0a';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);
+    // Clock face
+    ctx.strokeStyle='#d4a574';ctx.lineWidth=3;
+    ctx.beginPath();ctx.arc(0,0,80,0,Math.PI*2);ctx.stroke();
+    // Tick marks
+    for(let i=0;i<12;i++){
+      const a=(i/12)*Math.PI*2-Math.PI/2;
+      ctx.beginPath();ctx.moveTo(Math.cos(a)*70,Math.sin(a)*70);ctx.lineTo(Math.cos(a)*80,Math.sin(a)*80);ctx.stroke();
+    }
+    // Hands
+    const hourA=mouseAngle+t*.5;const minA=mouseAngle*12+t;
+    ctx.strokeStyle='#d4a574';ctx.lineWidth=4;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(hourA)*40,Math.sin(hourA)*40);ctx.stroke();
+    ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(minA)*60,Math.sin(minA)*60);ctx.stroke();
+    // Center
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,5,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

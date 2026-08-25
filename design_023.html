@@ -1,0 +1,59 @@
+<!-- Design: 8-Bit Game Boy | Unique approach: 4-color palette game scene with arrow key control -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8-Bit Game Boy</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Press Start 2P',cursive;background:#202028;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;image-rendering:pixelated;border:6px solid #555;border-radius:8px}
+  .hud{display:flex;gap:40px;margin-top:20px;color:#8bac0f;font-size:.7rem;z-index:2}
+</style>
+</head>
+<body>
+<canvas id="c" width="200" height="180"></canvas>
+<div class="hud"><div>SCORE: <span id="score">0</span></div><div>COINS: <span id="coins">0</span></div></div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  const W=200,H=180;
+  const colors=['#0f380f','#306230','#8bac0f','#9bbc0f'];
+  let player={x:90,y:140,w:12,h:12,vx:0,vy:0,onGround:false};
+  let coins=[],score=0,coinCount=0;
+  const keys={};
+  addEventListener('keydown',e=>keys[e.key]=true);
+  addEventListener('keyup',e=>keys[e.key]=false);
+  for(let i=0;i<5;i++)coins.push({x:20+i*35,y:50+Math.random()*40,size:4, collected:false});
+  function update(){
+    if(keys['ArrowLeft']||keys['a'])player.vx=-1.5;
+    if(keys['ArrowRight']||keys['d'])player.vx=1.5;
+    if((keys['ArrowUp']||keys['w']||keys[' '])&&player.onGround){player.vy=-5;player.onGround=false}
+    player.vy+=.3;player.x+=player.vx;player.y+=player.vy;
+    if(player.x<0)player.x=0;if(player.x>W-player.w)player.x=W-player.w;
+    if(player.y>H-player.h){player.y=H-player.h;player.vy=0;player.onGround=true}
+    coins.forEach(c=>{
+      if(!c.collected&&Math.hypot(player.x+player.w/2-c.x,player.y+player.h/2-c.y)<12){
+        c.collected=true;score+=10;coinCount++;document.getElementById('score').textContent=score;document.getElementById('coins').textContent=coinCount;
+      }
+    });
+  }
+  function draw(){
+    ctx.fillStyle=colors[3];ctx.fillRect(0,0,W,H);
+    // Ground
+    ctx.fillStyle=colors[1];ctx.fillRect(0,H-20,W,20);
+    ctx.fillStyle=colors[0];for(let i=0;i<W;i+=8)ctx.fillRect(i,H-20,4,2);
+    // Player
+    ctx.fillStyle=colors[0];ctx.fillRect(player.x,player.y,player.w,player.h);
+    ctx.fillStyle=colors[3];ctx.fillRect(player.x+2,player.y+2,3,3);
+    // Coins
+    coins.forEach(c=>{if(!c.collected){ctx.fillStyle=colors[2];ctx.fillRect(c.x,c.y,c.size,c.size)}});
+    // Text
+    ctx.fillStyle=colors[0];ctx.font='8px "Press Start 2P"';ctx.fillText('ARROWS to move',10,15);
+  }
+  function loop(){update();draw();requestAnimationFrame(loop)}
+  loop();
+</script>
+</body>
+</html>

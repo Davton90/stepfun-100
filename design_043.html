@@ -1,0 +1,57 @@
+<!-- Design: Sacred Geometry | Unique approach: golden ratio flower of life with click expand -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sacred Geometry</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cinzel',serif;background:#0a0a1a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;color:#d4af37;z-index:2;letter-spacing:.5em;text-shadow:0 0 20px rgba(212,175,55,.5)}
+  .hint{position:absolute;bottom:30px;font-size:.8rem;color:rgba(212,175,55,.5);z-index:2;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">SACRED GEOMETRY</div>
+<div class="hint">click to expand</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,scale=1,targetScale=1;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>{targetScale=targetScale===1?2:targetScale===2?3:1});
+  function drawFlowerOfLife(cx,cy,r,layers){
+    ctx.beginPath();
+    for(let ring=0;ring<=layers;ring++){
+      const count=ring===0?1:ring*6;
+      for(let i=0;i<count;i++){
+        const angle=(i/(ring||1))*Math.PI*2;
+        const x=cx+Math.cos(angle)*r*ring;
+        const y=cy+Math.sin(angle)*r*ring;
+        ctx.moveTo(x+r,y);ctx.arc(x,y,r,0,Math.PI*2);
+      }
+    }
+    ctx.strokeStyle='rgba(212,175,55,.4)';ctx.lineWidth=1.5;ctx.stroke();
+  }
+  function draw(){
+    scale+=(targetScale-scale)*.05;
+    ctx.fillStyle='#0a0a1a';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);ctx.scale(scale,scale);
+    drawFlowerOfLife(0,0,40,3);
+    // Metatron's cube lines
+    ctx.strokeStyle='rgba(212,175,55,.15)';ctx.lineWidth=.5;
+    for(let i=0;i<6;i++){
+      const a=(i/6)*Math.PI*2;
+      ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*120,Math.sin(a)*120);ctx.stroke();
+    }
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

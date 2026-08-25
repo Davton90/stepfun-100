@@ -1,0 +1,52 @@
+<!-- Design: Alchemy Lab | Unique approach: ancient laboratory with elements mixing -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alchemy Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Cinzel',serif;background:#1a0f05;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#d4af37;letter-spacing:.5em;text-shadow:0 0 20px rgba(212,175,55,.5)}
+  .subtitle{position:absolute;bottom:30px;font-size:.8rem;z-index:2;color:#8b6f47;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">ALCHEMY</title>
+<div class="subtitle">click to combine elements</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>potions.push(new Potion(e.clientX,e.clientY)));
+  const colors=['#ff0000','#00ff00','#0000ff','#ffff00','#ff00ff','#00ffff'];
+  class Potion{
+    constructor(x,y){this.x=x;this.y=y;this.size=0;this.targetSize=15+Math.random()*25;this.vx=(Math.random()-.5)*2;this.vy=-1-Math.random()*2;this.color=colors[Math.floor(Math.random()*colors.length)];this.life=1}
+    update(){this.x+=this.vx;this.y+=this.vy;this.vy+=.03;this.size+=(this.targetSize-this.size)*.1;this.life-=.005;if(this.y>h-20){this.vy*=-.5;this.vx*=.8}}
+    draw(){
+      ctx.globalAlpha=this.life;ctx.fillStyle=this.color;
+      ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#d4af37';ctx.lineWidth=2;ctx.stroke();ctx.globalAlpha=1;
+    }
+  }
+  let potions=[];
+  function loop(){
+    ctx.fillStyle='rgba(26,15,5,.05)';ctx.fillRect(0,0,w,h);
+    // Flask shapes
+    ctx.strokeStyle='rgba(212,175,55,.3)';ctx.lineWidth=2;
+    for(let i=0;i<3;i++){
+      const x=w/4+i*w/4;ctx.beginPath();ctx.moveTo(x,h-50);ctx.lineTo(x,h-150);ctx.stroke();
+    }
+    potions.forEach(p=>{p.update();p.draw()});
+    potions=potions.filter(p=>p.life>0);
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

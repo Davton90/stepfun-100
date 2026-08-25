@@ -1,0 +1,54 @@
+<!-- Design: Dieselpunk Machine | Unique approach: bronze/steam/brass mechanical gears turning -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dieselpunk Machine</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rajdhani',sans-serif;background:#1a0f0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#d4a574;letter-spacing:.3em;text-shadow:0 0 20px rgba(212,165,116,.3)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">DIESEL MACHINE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  let t=0;
+  const gears=[];
+  for(let i=0;i<5;i++)gears.push({x:w/2+(Math.random()-.5)*200,y:h/2+(Math.random()-.5)*150,teeth:8+i*2,r:30+i*20,rot:Math.random()*Math.PI*2,speed:(i%2?1:-1)*(.02+i*.005)});
+  function drawGear(x,y,r,teeth,rot){
+    ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+    ctx.fillStyle='#8b6f47';ctx.strokeStyle='#5a4a30';ctx.lineWidth=2;
+    ctx.beginPath();
+    for(let i=0;i<teeth*2;i++){
+      const a=(i/(teeth*2))*Math.PI*2;
+      const r2=i%2===0?r:r*0.7;
+      const px=Math.cos(a)*r2;const py=Math.sin(a)*r2;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    }
+    ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillStyle='#5a4a30';ctx.beginPath();ctx.arc(0,0,r*.3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+  function loop(){
+    t+=.016;
+    ctx.fillStyle='#1a0f0a';ctx.fillRect(0,0,w,h);
+    gears.forEach(g=>{g.rot+=g.speed;drawGear(g.x,g.y,g.r,g.teeth,g.rot)});
+    // Steam particles
+    if(Math.random()<.1){
+      ctx.fillStyle='rgba(200,200,200,.1)';ctx.beginPath();ctx.arc(w/2+Math.random()*40-20,h/2-50,10+Math.random()*10,0,Math.PI*2);ctx.fill();
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

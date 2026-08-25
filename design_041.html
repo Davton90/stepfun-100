@@ -1,0 +1,48 @@
+<!-- Design: Fire Simulation | Unique approach: procedural fire particles with mouse fuel -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fire Simulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#0a0a0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;color:#ff8800;z-index:2;text-shadow:0 0 20px rgba(255,136,0,.6);letter-spacing:.3em}
+  .hint{position:absolute;bottom:30px;font-size:.9rem;color:rgba(255,136,0,.5);z-index:2}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">INFERNO</div>
+<div class="hint">move mouse to add fuel</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:w/2||400,y:h||300};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  class Ember{
+    constructor(x,y){this.x=x;this.y=y;this.vx=(Math.random()-.5)*2;this.vy=-2-Math.random()*3;this.life=1;this.size=2+Math.random()*4;this.hue=20+Math.random()*30}
+    update(){this.x+=this.vx+Math.sin(Date.now()*.01+this.y*.01)*.5;this.y+=this.vy;this.life-=.01;this.size*=.99}
+    draw(){
+      ctx.globalAlpha=this.life;ctx.fillStyle=`hsl(${this.hue},100%,${50+this.life*30}%)`;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+    }
+  }
+  let embers=[];
+  function loop(){
+    ctx.fillStyle='rgba(10,10,10,.15)';ctx.fillRect(0,0,w,h);
+    // Add embers at mouse
+    for(let i=0;i<5;i++)embers.push(new Ember(mouse.x+(Math.random()-.5)*40,mouse.y));
+    // Add base embers
+    if(Math.random()<.3)embers.push(new Ember(w/2+(Math.random()-.5)*100,h-50));
+    embers=embers.filter(e=>e.life>0);
+    embers.forEach(e=>{e.update();e.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

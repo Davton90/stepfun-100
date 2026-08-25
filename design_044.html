@@ -1,0 +1,53 @@
+<!-- Design: Tessellation Mosaic | Unique approach: interlocking colorful shapes with hover highlight -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tessellation Mosaic</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Grotesk',sans-serif;background:#1a1a2e;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;color:#fff;z-index:2;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">TESSELLATION</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+  const tileSize=60;
+  const colors=['#e94560','#0f3460','#16213e','#533483','#e94560','#0f3460','#16213e'];
+  function draw(){
+    ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,w,h);
+    for(let y=0;y<h+tileSize;y+=tileSize){
+      for(let x=0;x<w+tileSize;x+=tileSize){
+        const offsetX=(Math.floor(y/tileSize)%2)*(tileSize/2);
+        const cx=x+offsetX,cy=y;
+        const dx=mouse.x-cx,dy=mouse.y-cy,dist=Math.hypot(dx,dy);
+        const highlight=dist<100?1-dist/100:0;
+        const colorIdx=(Math.floor(x/tileSize)+Math.floor(y/tileSize))%colors.length;
+        ctx.fillStyle=colors[colorIdx];ctx.globalAlpha=.6+highlight*.4;
+        // Hexagon-like shape
+        ctx.beginPath();
+        for(let i=0;i<6;i++){
+          const a=(i/6)*Math.PI*2-Math.PI/6;
+          const px=cx+Math.cos(a)*tileSize*.4;
+          const py=cy+Math.sin(a)*tileSize*.4;
+          i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+        }
+        ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

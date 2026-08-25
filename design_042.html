@@ -1,0 +1,45 @@
+<!-- Design: Weather Widget | Unique approach: animated weather icons with day/night cycle -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Widget</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:linear-gradient(135deg,#4a90e2,#87ceeb);overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:background 2s}
+  body.night{background:linear-gradient(135deg,#1a1a3e,#2d2d5a)}
+  .card{background:rgba(255,255,255,.2);backdrop-filter:blur(10px);padding:30px 50px;border-radius:20px;text-align:center;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,.1);transition:all .5s}
+  .temp{font-size:4rem;font-weight:300;line-height:1}
+  .condition{font-size:1.2rem;margin-top:10px;font-weight:600;letter-spacing:.1em}
+  .details{display:flex;gap:30px;margin-top:20px;font-size:.85rem;opacity:.8}
+  .icon{font-size:3rem;margin-bottom:15px}
+  .toggle{margin-top:20px;padding:8px 20px;background:rgba(255,255,255,.3);border:none;color:#fff;font-family:inherit;border-radius:10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon" id="icon">☀️</div>
+  <div class="temp">24°</div>
+  <div class="condition" id="condition">SUNNY</div>
+  <div class="details"><span>💧 45%</span><span>🌬️ 12km/h</span><span>📍 Jakarta</span></div>
+  <button class="toggle" onclick="toggleWeather()">Toggle Day/Night</button>
+</div>
+<script>
+  const icons={sunny:'☀️',cloudy:'☁️',rainy:'🌧️',night:'🌙'};
+  const conditions={sunny:'SUNNY',cloudy:'CLOUDY',rainy:'RAINY',night:'CLEAR NIGHT'};
+  const states=['sunny','cloudy','rainy'];
+  let current=0;
+  function toggleWeather(){
+    document.body.classList.toggle('night');
+    const isNight=document.body.classList.contains('night');
+    document.getElementById('icon').textContent=isNight?icons.night:icons[states[current]];
+    document.getElementById('condition').textContent=isNight?conditions.night:conditions[states[current]];
+  }
+  setInterval(()=>{
+    if(!document.body.classList.contains('night')){current=(current+1)%states.length;document.getElementById('icon').textContent=icons[states[current]];document.getElementById('condition').textContent=conditions[states[current]]}
+  },5000);
+</script>
+</body>
+</html>

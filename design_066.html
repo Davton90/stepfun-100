@@ -1,0 +1,43 @@
+<!-- Design: Hard Edge | Unique approach: sharp color transitions with click cut new shape -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hard Edge</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Grotesk',sans-serif;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#fff;text-shadow:2px 2px 0 #000;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">HARD EDGE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>shapes.push(new Shape(e.clientX,e.clientY)));
+  const colors=['#ff0000','#0000ff','#ffff00','#00ff00','#ff8800','#8800ff'];
+  class Shape{
+    constructor(x,y){this.x=x;this.y=y;this.w=50+Math.random()*150;this.h=50+Math.random()*150;this.color=colors[Math.floor(Math.random()*colors.length)];this.rot=Math.floor(Math.random()*4)*Math.PI/2}
+    draw(){
+      ctx.save();ctx.translate(this.x,this.y);ctx.rotate(this.rot);
+      ctx.fillStyle=this.color;ctx.fillRect(-this.w/2,-this.h/2,this.w,this.h);
+      ctx.restore();
+    }
+  }
+  let shapes=[new Shape(w/2,h/2)];
+  function loop(){
+    ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+    shapes.forEach(s=>s.draw());
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

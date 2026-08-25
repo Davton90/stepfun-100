@@ -1,0 +1,54 @@
+<!-- Design: Fractal Explorer | Unique approach: infinite recursive patterns with mouse zoom -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fractal Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Mono',monospace;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.5rem;font-weight:700;z-index:2;color:#0f0;letter-spacing:.3em;text-shadow:0 0 10px #0f0}
+  .hud{position:absolute;top:30px;right:30px;font-size:.7rem;color:#0f0;z-index:2;text-align:right;line-height:1.8}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">FRACTAL.EXE</div>
+<div class="hud"><div>ZOOM: <span id="zoom">1.0x</span></div><div>ITER: <span id="iter">100</span></div></div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,zoom=1,iter=100;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>{zoom*=2;iter*=2;document.getElementById('zoom').textContent=zoom.toFixed(1)+'x';document.getElementById('iter').textContent=iter});
+  function mandelbrot(cx,cy,maxIter){
+    let x=0,y=0,iter=0;
+    while(x*x+y*y<=4&&iter<maxIter){const xt=x*x-y*y+cx;y=2*x*y+cy;x=xt;iter++}
+    return iter;
+  }
+  function draw(){
+    const img=ctx.createImageData(w,h);const d=img.data;
+    for(let py=0;py<h;py+=4){
+      for(let px=0;px<w;px+=4){
+        const x0=(px/w-0.5)*3/zoom;
+        const y0=(py/h-0.5)*2/zoom;
+        const m=mandelbrot(x0,y0,iter);
+        const hue=m%360;const light=m===iter?0:50+m%50;
+        for(let dy=0;dy<4&&py+dy<h;dy++){
+          for(let dx=0;dx<4&&px+dx<w;dx++){
+            const i=((py+dy)*w+(px+dx))*4;
+            d[i]=hue>180?255:hue*2;d[i+1]=hue>180?100:hue;d[i+2]=hue>180?100:255-hue;d[i+3]=255;
+          }
+        }
+      }
+    }
+    ctx.putImageData(img,0,0);
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

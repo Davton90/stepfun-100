@@ -1,0 +1,53 @@
+<!-- Design: Hauntology Memory | Unique approach: faded vintage TV static with ghostly images -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hauntology Memory</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'VT323',monospace;background:#1a1a1a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.5rem;z-index:2;color:#aaa;letter-spacing:.5em;opacity:.5}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">MEMORY_LOST</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  let ghosts=[];
+  for(let i=0;i<5;i++)ghosts.push({x:Math.random()*w,y:Math.random()*h,size:50+Math.random()*100,alpha:.1+Math.random()*.2});
+  function draw(){
+    // Static noise
+    const id=ctx.getImageData(0,0,w,h);const d=id.data;
+    for(let i=0;i<d.length;i+=4){
+      const v=Math.random()*30;
+      d[i]=d[i+1]=d[i+2]=v;d[i+3]=255;
+    }
+    ctx.putImageData(id,0,0);
+    // Ghostly images
+    ghosts.forEach(g=>{
+      g.x+=Math.sin(Date.now()*.001+g.y*.01)*.5;
+      g.y+=Math.cos(Date.now()*.001+g.x*.01)*.3;
+      const grad=ctx.createRadialGradient(g.x,g.y,0,g.x,g.y,g.size);
+      grad.addColorStop(0,`rgba(100,100,100,${g.alpha})`);
+      grad.addColorStop(1,'rgba(100,100,100,0)');
+      ctx.fillStyle=grad;ctx.fillRect(g.x-g.size,g.y-g.size,g.size*2,g.size*2);
+    });
+    // Tuning lines
+    if(Math.random()<.02){
+      const y=Math.random()*h;ctx.fillStyle='rgba(255,255,255,.3)';ctx.fillRect(0,y,w,2);
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!-- Design: Psychedelic Liquid Spin | Unique approach: rotating liquid spiral with click direction change -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Psychedelic Liquid Spin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Bungee Shade',cursive;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:relative;z-index:2;font-size:3.5rem;color:#fff;text-shadow:0 0 30px #ff00de,0 0 60px #00ffff;pointer-events:none;mix-blend-mode:screen}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">LIQUID SPIN</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,dir=1;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize(); addEventListener('resize',resize);
+  addEventListener('click',()=>dir*=-1);
+  let t=0;
+  function draw(){
+    t+=.01*dir;
+    ctx.fillStyle='rgba(0,0,0,.1)';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);
+    for(let i=0;i<8;i++){
+      ctx.rotate(t*.5+i*.8);
+      ctx.beginPath();
+      for(let a=0;a<Math.PI*2;a+=.05){
+        const r=100+i*40+Math.sin(a*6+t*2)*40;
+        const x=Math.cos(a)*r;const y=Math.sin(a)*r;
+        a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      const hue=(t*50+i*45)%360;
+      ctx.strokeStyle=`hsl(${hue},100%,60%)`;ctx.lineWidth=4;ctx.stroke();
+    }
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

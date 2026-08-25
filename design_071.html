@@ -1,0 +1,55 @@
+<!-- Design: Glitch Art Digital | Unique approach: RGB split, data moshing, mouse intensifies glitch -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glitch Art Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'VT323',monospace;background:#000;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;z-index:2;color:#fff;text-shadow:2px 0 #ff0000,-2px 0 #00ffff;animation:glitch .2s infinite}
+  @keyframes glitch{0%{transform:translate(0)}25%{transform:translate(-3px,3px)}50%{transform:translate(3px,-3px)}75%{transform:translate(-2px,2px)}100%{transform:translate(0)}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">GLITCH_CORE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouseSpeed=0,lastX=0,lastY=0;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{const dx=e.clientX-lastX,dy=e.clientY-lastY;mouseSpeed=Math.hypot(dx,dy);lastX=e.clientX;lastY=e.clientY});
+  function draw(){
+    // Base image
+    ctx.fillStyle='#111';ctx.fillRect(0,0,w,h);
+    for(let i=0;i<5;i++){
+      const hue=(Date.now()*.1+i*50)%360;
+      ctx.fillStyle=`hsl(${hue},100%,50%)`;
+      ctx.fillRect(w/2-100+i*50,h/2-50,100,100);
+    }
+    // Glitch
+    const intensity=Math.min(1,mouseSpeed/50+Math.random()*.1);
+    if(Math.random()<.3){
+      const y=Math.random()*h;const h2=5+Math.random()*30;const offset=(Math.random()-.5)*100*intensity;
+      const img=ctx.getImageData(0,y,w,h2);ctx.putImageData(img,offset,y);
+    }
+    if(Math.random()<.2){
+      ctx.globalCompositeOperation='screen';ctx.fillStyle=`rgba(255,0,0,${intensity*.2})`;ctx.fillRect(3,0,w,h);
+      ctx.fillStyle=`rgba(0,0,255,${intensity*.2})`;ctx.fillRect(-3,0,w,h);ctx.globalCompositeOperation='source-over';
+    }
+    // Noise
+    if(Math.random()<.1){
+      const id=ctx.getImageData(0,0,w,h);const d=id.data;
+      for(let i=0;i<d.length;i+=40)d[i]=255-d[i];
+      ctx.putImageData(id,0,0);
+    }
+    mouseSpeed*=.9;requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

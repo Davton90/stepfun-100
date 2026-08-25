@@ -1,0 +1,51 @@
+<!-- Design: Fluid Simulation | Unique approach: smooth color trail fluid stirred by mouse -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fluid Simulation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#f0f4f8;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:300;z-index:2;color:#334e68;letter-spacing:.2em}
+  .subtitle{position:absolute;bottom:30px;width:100%;text-align:center;font-size:.8rem;z-index:2;color:#829ab1;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">FLUID FLOW</div>
+<div class="subtitle">move mouse to stir</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:-9999,y:-9999,px:0,py:0};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.px=mouse.x;mouse.py=mouse.y;mouse.x=e.clientX;mouse.y=e.clientY});
+  class Drop{
+    constructor(x,y,vx,vy,color){this.x=x;this.y=y;this.vx=vx;this.vy=vy;this.color=color;this.size=8+Math.random()*12}
+    update(){this.x+=this.vx;this.y+=this.vy;this.vx*=.96;this.vy*=.96;this.size*=.995}
+    draw(){ctx.fillStyle=this.color;ctx.globalAlpha=.5;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
+  }
+  let drops=[];
+  function loop(){
+    ctx.fillStyle='rgba(240,244,248,.08)';ctx.fillRect(0,0,w,h);
+    if(mouse.x>0){
+      const dx=mouse.x-mouse.px,dy=mouse.y-mouse.py;
+      const speed=Math.hypot(dx,dy);
+      const count=Math.min(10,Math.floor(speed/2));
+      for(let i=0;i<count;i++){
+        const hue=(Date.now()*.1+mouse.x*.1)%360;
+        drops.push(new Drop(mouse.x+(Math.random()-.5)*10,mouse.y+(Math.random()-.5)*10,dx*.3+(Math.random()-.5)*2,dy*.3+(Math.random()-.5)*2,`hsl(${hue},70%,60%)`));
+      }
+    }
+    drops=drops.filter(d=>d.size>.5);
+    drops.forEach(d=>{d.update();d.draw()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!-- Design: Chrome Liquid Metal | Unique approach: morphing liquid blob with metallic reflection -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chrome Liquid Metal</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rajdhani',sans-serif;background:#1a1a2e;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;width:100%;text-align:center;font-size:2rem;font-weight:300;z-index:2;color:#e0e0e0;letter-spacing:.5em;text-shadow:0 0 20px rgba(224,224,224,.3)}
+  .subtitle{position:absolute;bottom:40px;width:100%;text-align:center;font-size:.8rem;z-index:2;color:#888;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">LIQUID CHROME</div>
+<div class="subtitle">move mouse to morph</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  function draw(){
+    ctx.fillStyle='#1a1a2e';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);
+    const points=8;
+    for(let i=0;i<points;i++){
+      const angle=(i/points)*Math.PI*2;
+      const r=150+Math.sin(Date.now()*.002+i*1.5)*30+Math.cos(Date.now()*.003+i)*20;
+      const x=Math.cos(angle)*r+(mouse.x-.5)*100;
+      const y=Math.sin(angle)*r+(mouse.y-.5)*100;
+      const grad=ctx.createLinearGradient(-r,-r,r,r);
+      grad.addColorStop(0,'#b8b8b8');grad.addColorStop(.3,'#f0f0f0');grad.addColorStop(.5,'#909090');grad.addColorStop(1,'#606060');
+      ctx.fillStyle=grad;
+      ctx.beginPath();ctx.arc(x,y,80,0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

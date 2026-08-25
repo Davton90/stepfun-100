@@ -1,0 +1,59 @@
+<!-- Design: Wabi-Sabi Ink Wash | Unique approach: brush-stroke textures with uneven edges and click ink splatter -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wabi-Sabi Ink Wash</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;900&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Noto Serif JP',serif;background:#f0ead6;overflow:hidden;height:100vh;color:#2b2b2b}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:40px;right:40px;font-size:2rem;font-weight:200;z-index:2;writing-mode:vertical-rl;letter-spacing:.5em;color:#4a4a4a}
+  .subtitle{position:absolute;bottom:40px;left:40px;font-size:.8rem;z-index:2;opacity:.5;letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">侘寂</div>
+<div class="subtitle">click to add ink splatter</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',e=>addSplatter(e.clientX,e.clientY));
+  function brushStroke(x,y,length,angle,width){
+    ctx.beginPath();
+    ctx.moveTo(x,y);
+    const steps=20;
+    for(let i=1;i<=steps;i++){
+      const t=i/steps;
+      const px=x+Math.cos(angle)*length*t+(Math.random()-.5)*width;
+      const py=y+Math.sin(angle)*length*t+(Math.random()-.5)*width;
+      ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle='#2b2b2b';ctx.lineWidth=width;ctx.lineCap='round';ctx.globalAlpha=.6;ctx.stroke();ctx.globalAlpha=1;
+  }
+  function addSplatter(x,y){
+    const strokes=3+Math.floor(Math.random()*5);
+    for(let i=0;i<strokes;i++){
+      const angle=Math.random()*Math.PI*2;
+      const length=50+Math.random()*150;
+      const width=2+Math.random()*15;
+      brushStroke(x,y,length,angle,width);
+    }
+  }
+  // Initial strokes
+  for(let i=0;i<8;i++)addSplatter(w/2+(Math.random()-.5)*400,h/2+(Math.random()-.5)*300);
+  let t=0;
+  function loop(){
+    t+=.005;
+    ctx.fillStyle='rgba(240,234,214,.02)';ctx.fillRect(0,0,w,h);
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

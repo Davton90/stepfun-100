@@ -1,0 +1,58 @@
+<!-- Design: Expressionist Portrait | Unique approach: distorted colors and brush strokes with mouse distortion -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expressionist Portrait</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rubik Glitch',cursive;background:#1a0f0a;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;z-index:2;color:#e74c3c;text-shadow:0 0 20px rgba(231,76,60,.5);letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">EXPRESSION</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  function draw(){
+    ctx.fillStyle='#1a0f0a';ctx.fillRect(0,0,w,h);
+    // Abstract face
+    const cx=w/2,cy=h/2;
+    const distortion=(mouse.x-.5)*50;
+    // Head shape
+    ctx.fillStyle='#c0392b';ctx.beginPath();
+    ctx.ellipse(cx+distortion*.5,cy,120+distortion*.3,150,0,0,Math.PI*2);ctx.fill();
+    // Eyes
+    ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.ellipse(cx-40+distortion,cy-30,25+Math.sin(Date.now()*.01)*5,15,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(cx+40+distortion,cy-30,25+Math.cos(Date.now()*.01)*5,15,0,0,Math.PI*2);ctx.fill();
+    // Pupils
+    ctx.fillStyle='#000';
+    ctx.beginPath();ctx.arc(cx-35+distortion+mouse.x*10,cy-30+mouse.y*5,8,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(cx+45+distortion+mouse.x*10,cy-30+mouse.y*5,8,0,Math.PI*2);ctx.fill();
+    // Mouth
+    ctx.strokeStyle='#000';ctx.lineWidth=4;
+    ctx.beginPath();ctx.arc(cx+distortion,cy+50,40,mouse.x*Math.PI,mouse.y*Math.PI);ctx.stroke();
+    // Brush strokes
+    for(let i=0;i<8;i++){
+      ctx.strokeStyle=`hsla(${10+i*15},80%,50%,.4)`;
+      ctx.lineWidth=5+Math.random()*10;
+      ctx.beginPath();
+      ctx.moveTo(cx+Math.random()*200-100,cy+Math.random()*200-100);
+      ctx.lineTo(cx+Math.random()*200-100+distortion,cy+Math.random()*200-100);
+      ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

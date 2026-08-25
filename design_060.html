@@ -1,0 +1,55 @@
+<!-- Design: Cubist Still Life | Unique approach: fragmented geometric shapes rotating slowly -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cubist Still Life</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Grotesk',sans-serif;background:#f5f0e8;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;letter-spacing:.3em;color:#5a4a3a}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">CUBIST</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>generate());
+  let shapes=[];
+  function generate(){
+    shapes=[];
+    const colors=['#c0392b','#2980b9','#f39c12','#27ae60','#8e44ad','#d35400'];
+    for(let i=0;i<15;i++){
+      shapes.push({
+        x:w/2+(Math.random()-.5)*300,y:h/2+(Math.random()-.5)*300,
+        w:40+Math.random()*100,h:40+Math.random()*100,
+        rot:Math.random()*Math.PI,rotSpeed:(Math.random()-.5)*.01,
+        color:colors[Math.floor(Math.random()*colors.length)]
+      });
+    }
+  }
+  generate();
+  function draw(){
+    ctx.fillStyle='#f5f0e8';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(w/2,h/2);ctx.rotate(Date.now()*.0005);
+    shapes.forEach(s=>{
+      s.rot+=s.rotSpeed;
+      ctx.save();ctx.translate(s.x-w/2,s.y-h/2);ctx.rotate(s.rot);
+      ctx.fillStyle=s.color;ctx.fillRect(-s.w/2,-s.h/2,s.w,s.h);
+      ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.strokeRect(-s.w/2,-s.h/2,s.w,s.h);
+      ctx.restore();
+    });
+    ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

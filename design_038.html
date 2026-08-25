@@ -1,0 +1,37 @@
+<!-- Design: Magazine Editorial | Unique approach: multi-column layout with pull quotes and scroll reveal -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magazine Editorial</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#faf9f6;color:#1a1a1a;overflow-x:hidden}
+  .spread{max-width:1200px;margin:0 auto;padding:60px 40px;display:grid;grid-template-columns:1fr 2fr 1fr;gap:30px;opacity:0;transform:translateY(20px);transition:all .8s ease}
+  .spread.visible{opacity:1;transform:translateY(0)}
+  .headline{grid-column:1/-1;font-family:'Playfair Display',serif;font-size:4rem;font-weight:700;line-height:1.1;margin-bottom:30px}
+  .column{font-size:.95rem;line-height:1.8;color:#333}
+  .column p{margin-bottom:1em}
+  .pullquote{grid-column:2;font-family:'Playfair Display',serif;font-size:1.8rem;font-style:italic;color:#8b4513;padding:40px 0;border-top:3px solid #8b4513;border-bottom:3px solid #8b4513;text-align:center;line-height:1.4}
+  .byline{grid-column:1/-1;display:flex;justify-content:space-between;padding-top:20px;border-top:1px solid #ddd;font-size:.8rem;color:#666;text-transform:uppercase;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<div class="spread" id="spread">
+  <div class="headline">The Art of Modern<br>Editorial Design</div>
+  <div class="column"><p>In the realm of contemporary design, the magazine spread remains a sacred canvas. Each column, each margin, each carefully chosen typeface contributes to a narrative that transcends mere words on a page.</p><p>The interplay between serif and sans-serif creates visual rhythm, guiding the reader through stories that demand attention.</p></div>
+  <div class="pullquote">"Design is not just what it looks like. Design is how it works."</div>
+  <div class="column"><p>White space is not empty space. It is active space—a breathing room that gives content the power to resonate. In editorial design, we sculpt with typography, color, and composition.</p><p>The modern editorial landscape demands versatility: from dense information architecture to vast, contemplative whitespace. Each approach serves its purpose.</p></div>
+  <div class="byline"><span>Vol. 42 / Issue 07</span><span>Design Quarterly</span><span>2024</span></div>
+</div>
+<script>
+  setTimeout(()=>document.getElementById('spread').classList.add('visible'),100);
+  document.addEventListener('wheel',e=>{
+    const s=document.getElementById('spread');
+    s.style.transform=`translateX(${-e.deltaY*.05}px)`;
+  });
+</script>
+</body>
+</html>

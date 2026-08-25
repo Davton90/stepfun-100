@@ -1,0 +1,54 @@
+<!-- Design: Pop Art Comic | Unique approach: bold Ben-Day dots and speech bubbles -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pop Art Comic</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Bangers',cursive;background:#ffff00;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:3rem;z-index:2;color:#ff0080;text-shadow:4px 4px 0 #000;transform:rotate(-2deg)}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">POW! ZAP!</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  const popColors=['#ff0080','#00ffff','#ffff00','#ff8800'];
+  function drawDot(x,y,r,color){
+    ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+  }
+  function drawBubble(x,y,text){
+    ctx.strokeStyle='#000';ctx.lineWidth=4;ctx.fillStyle='#fff';
+    ctx.beginPath();ctx.ellipse(x,y,80,40,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#000';ctx.font='bold 20px "Bangers"';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,x,y);
+  }
+  function loop(){
+    ctx.fillStyle='#ffff00';ctx.fillRect(0,0,w,h);
+    // Ben-Day dots
+    for(let y=0;y<h;y+=12){
+      for(let x=0;x<w;x+=12){
+        const color=popColors[(Math.floor(x/60)+Math.floor(y/60))%popColors.length];
+        drawDot(x,y,3,color);
+      }
+    }
+    // Speech bubbles
+    drawBubble(w/2-150,h/3,'WHAM!');
+    drawBubble(w/2+150,h/2,'BAM!');
+    // Comic burst
+    ctx.fillStyle='#ff0080';ctx.strokeStyle='#000';ctx.lineWidth=5;
+    ctx.beginPath();ctx.arc(w/2,h/2,80,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.fillStyle='#fff';ctx.font='bold 60px "Bangers"';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('POW!',w/2,h/2);
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

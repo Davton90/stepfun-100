@@ -1,0 +1,53 @@
+<!-- Design: Aurora Borealis Sky | Unique approach: flowing curtain-like aurora bands with mouse shift -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora Borealis Sky</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Montserrat',sans-serif;background:#0a0e27;overflow:hidden;height:100vh;color:#fff}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;bottom:50px;width:100%;text-align:center;font-size:2.5rem;font-weight:200;z-index:2;letter-spacing:.5em;text-shadow:0 0 30px rgba(100,200,255,.6)}
+  .subtitle{position:absolute;bottom:20px;width:100%;text-align:center;font-size:.8rem;z-index:2;opacity:.5;letter-spacing:.3em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">AURORA</div>
+<div class="subtitle">move mouse to shift sky</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h,mouse={x:.5,y:.5};
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('mousemove',e=>{mouse.x=e.clientX/w;mouse.y=e.clientY/h});
+  function draw(){
+    ctx.fillStyle='#0a0e27';ctx.fillRect(0,0,w,h);
+    for(let band=0;band<5;band++){
+      ctx.beginPath();
+      const baseY=h*(.2+band*.12);
+      const hue=120+band*40+Math.sin(Date.now()*.0005)*30;
+      for(let x=0;x<=w;x+=5){
+        const y=baseY+Math.sin(x*.003+Date.now()*.001+band)*50+Math.sin(x*.01+Date.now()*.002)*20+(mouse.y-.5)*100;
+        x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      for(let x=w;x>=0;x-=5){
+        const y=baseY+60+Math.sin(x*.003+Date.now()*.001+band+1)*40+(mouse.y-.5)*80;
+        ctx.lineTo(x,y);
+      }
+      ctx.closePath();
+      const grad=ctx.createLinearGradient(0,baseY-50,0,baseY+100);
+      grad.addColorStop(0,`hsla(${hue},80%,50%,0)`);
+      grad.addColorStop(.5,`hsla(${hue},80%,50%,.15)`);
+      grad.addColorStop(1,`hsla(${hue},80%,50%,0)`);
+      ctx.fillStyle=grad;ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+</script>
+</body>
+</html>

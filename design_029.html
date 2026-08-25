@@ -1,0 +1,56 @@
+<!-- Design: Generative Voronoi | Unique approach: colorful Voronoi cells that shift and regenerate -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generative Voronoi</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Space Grotesk',sans-serif;background:#111;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;color:#fff;z-index:2;letter-spacing:.3em}
+  .subtitle{position:absolute;bottom:30px;font-size:.8rem;color:rgba(255,255,255,.5);z-index:2;letter-spacing:.2em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">VORONOI</div>
+<div class="subtitle">click to regenerate</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',generate);
+  let points=[],colors=[];
+  function generate(){
+    points=[];colors=[];
+    const count=30+Math.floor(Math.random()*30);
+    for(let i=0;i<count;i++){
+      points.push({x:Math.random()*w,y:Math.random()*h});
+      colors.push(`hsl(${Math.random()*360},70%,55%)`);
+    }
+  }
+  generate();
+  function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
+  function loop(){
+    ctx.fillStyle='#111';ctx.fillRect(0,0,w,h);
+    // Draw Voronoi cells
+    for(let y=0;y<h;y+=4){
+      for(let x=0;x<w;x+=4){
+        let min=Infinity,minIdx=0;
+        points.forEach((p,i)=>{const d=dist({x,y},p);if(d<min){min=d;minIdx=i}});
+        ctx.fillStyle=colors[minIdx];ctx.globalAlpha=.7;ctx.fillRect(x,y,4,4);
+      }
+    }
+    ctx.globalAlpha=1;
+    // Draw points
+    points.forEach(p=>{ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>

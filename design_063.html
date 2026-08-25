@@ -1,0 +1,61 @@
+<!-- Design: Surrealist Dream | Unique approach: melting objects drifting with click dream sequence -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Surrealist Dream</title>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Glitch&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Rubik Glitch',cursive;background:#2c3e50;overflow:hidden;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  canvas{display:block;position:absolute;inset:0}
+  .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;z-index:2;color:#e74c3c;text-shadow:0 0 20px rgba(231,76,60,.5);letter-spacing:.3em}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="title">DREAMSCAPE</div>
+<script>
+  const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+  let w,h;
+  function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
+  resize();addEventListener('resize',resize);
+  addEventListener('click',()=>dreamMode=!dreamMode);
+  let dreamMode=false,t=0;
+  let objects=[
+    {type:'clock',x:w/2,y:h/2,size:60},
+    {type:'eye',x:w/3,y:h/3,size:40},
+    {type:'fish',x:w/1.5,y:h/2,size:50}
+  ];
+  function drawMeltedClock(x,y,size){
+    ctx.fillStyle='#f39c12';ctx.beginPath();
+    ctx.ellipse(x,y,size,size*.6,Math.sin(t)*.2,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#000';ctx.beginPath();ctx.arc(x,y,size*.3,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y+size*.1,size*.15,0,Math.PI*2);ctx.fill();
+  }
+  function drawFloatingEye(x,y,size){
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(x,y,size,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#3498db';ctx.beginPath();ctx.arc(x,y,size*.5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#000';ctx.beginPath();ctx.arc(x,y,size*.2,0,Math.PI*2);ctx.fill();
+  }
+  function drawFish(x,y,size){
+    ctx.fillStyle='#e74c3c';ctx.beginPath();ctx.ellipse(x,y,size,size*.5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#c0392b';ctx.beginPath();ctx.moveTo(x+size,y);ctx.lineTo(x+size*1.5,y-size*.3);ctx.lineTo(x+size*1.5,y+size*.3);ctx.closePath();ctx.fill();
+  }
+  function loop(){
+    t+=.01;
+    ctx.fillStyle=dreamMode?'#1a0a2e':'#2c3e50';ctx.fillRect(0,0,w,h);
+    objects.forEach(o=>{
+      o.y+=Math.sin(t+o.x)*.5;
+      if(dreamMode){o.x+=Math.cos(t)*2;o.size+=Math.sin(t)*.5}
+      if(o.type==='clock')drawMeltedClock(o.x,o.y,o.size);
+      else if(o.type==='eye')drawFloatingEye(o.x,o.y,o.size);
+      else if(o.type==='fish')drawFish(o.x,o.y,o.size);
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+</script>
+</body>
+</html>
