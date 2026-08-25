@@ -1,4 +1,4 @@
-<!-- Design: Sacred Geometry | Unique approach: golden ratio flower of life with click expand -->
+﻿<!-- Design: Sacred Geometry | Unique approach: golden ratio flower of life with click expand -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,12 @@
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;color:#d4af37;z-index:2;letter-spacing:.5em;text-shadow:0 0 20px rgba(212,175,55,.5)}
   .hint{position:absolute;bottom:30px;font-size:.8rem;color:rgba(212,175,55,.5);z-index:2;letter-spacing:.2em}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">SACRED GEOMETRY</div>
 <div class="hint">click to expand</div>
@@ -55,3 +59,4 @@
 </script>
 </body>
 </html>
+

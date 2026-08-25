@@ -1,4 +1,4 @@
-<!-- Design: CRT Terminal | Unique approach: green phosphor terminal with typing animation and scanlines -->
+﻿<!-- Design: CRT Terminal | Unique approach: green phosphor terminal with typing animation and scanlines -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,8 +16,12 @@
   .cursor{display:inline-block;width:10px;height:1em;background:#00ff41;animation:blink 1s step-end infinite;vertical-align:text-bottom}
   @keyframes blink{50%{opacity:0}}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <div class="terminal">
   <div class="header">TERMINAL v3.2.1 // CONNECTED // SECURE</div>
   <div class="output" id="output"></div>
@@ -53,3 +57,4 @@
 </script>
 </body>
 </html>
+

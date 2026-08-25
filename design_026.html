@@ -1,4 +1,4 @@
-<!-- Design: Retro Computer Desktop | Unique approach: Win95-style draggable windows -->
+﻿<!-- Design: Retro Computer Desktop | Unique approach: Win95-style draggable windows -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,23 +19,27 @@
   .close-btn{width:16px;height:16px;background:#c0c0c0;border:1px solid;border-color:#fff #808080 #808080 #fff;color:#000;font-size:.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
   .window-body{padding:10px;flex:1;font-size:.8rem;color:#000;line-height:1.5}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <div class="desktop">
   <div class="icon" ondblclick="openWin('win1')"><div class="icon-img"></div>My PC</div>
   <div class="icon" ondblclick="openWin('win2')"><div class="icon-img"></div>Notepad</div>
   <div class="icon" ondblclick="openWin('win3')"><div class="icon-img"></div>Recycle</div>
 </div>
 <div class="window open" id="win1" style="top:50px;left:100px">
-  <div class="title-bar"><span>My Computer</span><div class="close-btn" onclick="closeWin('win1')">×</div></div>
+  <div class="title-bar"><span>My Computer</span><div class="close-btn" onclick="closeWin('win1')">Ã—</div></div>
   <div class="window-body">C: Local Disk (2.1GB free)<br>D: CD-ROM<br>E: Network</div>
 </div>
 <div class="window" id="win2" style="top:120px;left:200px">
-  <div class="title-bar"><span>Notepad</span><div class="close-btn" onclick="closeWin('win2')">×</div></div>
+  <div class="title-bar"><span>Notepad</span><div class="close-btn" onclick="closeWin('win2')">Ã—</div></div>
   <div class="window-body">Welcome to RetroOS 95.<br>Double-click icons to open.<br>Drag windows to move.</div>
 </div>
 <div class="window" id="win3" style="top:200px;left:300px">
-  <div class="title-bar"><span>Recycle Bin</span><div class="close-btn" onclick="closeWin('win3')">×</div></div>
+  <div class="title-bar"><span>Recycle Bin</span><div class="close-btn" onclick="closeWin('win3')">Ã—</div></div>
   <div class="window-body">Empty</div>
 </div>
 <script>
@@ -53,3 +57,4 @@
 </script>
 </body>
 </html>
+

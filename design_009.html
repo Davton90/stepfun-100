@@ -1,4 +1,4 @@
-<!-- Design: Solarpunk Verdant Dome | Unique approach: greenhouse dome with floating leaves and click-to-plant -->
+﻿<!-- Design: Solarpunk Verdant Dome | Unique approach: greenhouse dome with floating leaves and click-to-plant -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,12 @@
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2.5rem;font-style:italic;z-index:2;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.2)}
   .hint{position:absolute;bottom:30px;width:100%;text-align:center;font-size:.9rem;z-index:2;color:#fff;opacity:.8;font-style:italic}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">Verdant Dome</div>
 <div class="hint">click anywhere to plant a leaf</div>
@@ -41,3 +45,4 @@
 </script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<!-- Design: Claymorphism Playground | Unique approach: chunky pastel blobs that bounce and squash -->
+﻿<!-- Design: Claymorphism Playground | Unique approach: chunky pastel blobs that bounce and squash -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,12 @@
   .title{position:relative;z-index:2;font-size:2.2rem;font-weight:700;color:#5d4037;text-shadow:3px 3px 0 #ffab91;margin-bottom:20px}
   .subtitle{position:relative;z-index:2;font-size:1rem;color:#8d6e63;font-weight:500}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">CLAY WORLD</div>
 <div class="subtitle">click to add clay blobs</div>
@@ -54,3 +58,4 @@
 </script>
 </body>
 </html>
+

@@ -1,4 +1,4 @@
-<!-- Design: Aurora Borealis Sky | Unique approach: flowing curtain-like aurora bands with mouse shift -->
+﻿<!-- Design: Aurora Borealis Sky | Unique approach: flowing curtain-like aurora bands with mouse shift -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,12 @@
   .title{position:absolute;bottom:50px;width:100%;text-align:center;font-size:2.5rem;font-weight:200;z-index:2;letter-spacing:.5em;text-shadow:0 0 30px rgba(100,200,255,.6)}
   .subtitle{position:absolute;bottom:20px;width:100%;text-align:center;font-size:.8rem;z-index:2;opacity:.5;letter-spacing:.3em;text-transform:uppercase}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">AURORA</div>
 <div class="subtitle">move mouse to shift sky</div>
@@ -51,3 +55,4 @@
 </script>
 </body>
 </html>
+

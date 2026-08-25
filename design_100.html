@@ -1,4 +1,4 @@
-<!-- Design: Fractal Explorer | Unique approach: infinite recursive patterns with mouse zoom -->
+﻿<!-- Design: Fractal Explorer | Unique approach: infinite recursive patterns with mouse zoom -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,12 @@
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.5rem;font-weight:700;z-index:2;color:#0f0;letter-spacing:.3em;text-shadow:0 0 10px #0f0}
   .hud{position:absolute;top:30px;right:30px;font-size:.7rem;color:#0f0;z-index:2;text-align:right;line-height:1.8}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">FRACTAL.EXE</div>
 <div class="hud"><div>ZOOM: <span id="zoom">1.0x</span></div><div>ITER: <span id="iter">100</span></div></div>
@@ -52,3 +56,4 @@
 </script>
 </body>
 </html>
+

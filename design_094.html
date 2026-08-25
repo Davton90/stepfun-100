@@ -1,4 +1,4 @@
-<!-- Design: Japanese Zen Minimal | Unique approach: white/indigo rice paper with single brush stroke -->
+﻿<!-- Design: Japanese Zen Minimal | Unique approach: white/indigo rice paper with single brush stroke -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,10 +12,14 @@
   canvas{display:block;position:absolute;inset:0}
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.5rem;font-weight:200;z-index:2;color:#333;letter-spacing:.5em}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
-<div class="title">禅 — ZEN</div>
+<div class="title">ç¦… â€” ZEN</div>
 <script>
   const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
   let w,h;
@@ -37,9 +41,10 @@
     // Ink blob
     ctx.fillStyle='#1a1a1a';ctx.beginPath();ctx.arc(w/2+100,h/2-80,12,0,Math.PI*2);ctx.fill();
     // Red seal
-    ctx.fillStyle='#c41e3a';ctx.font='bold 24px serif';ctx.fillText('禅',w/2+140,h/2-60);
+    ctx.fillStyle='#c41e3a';ctx.font='bold 24px serif';ctx.fillText('ç¦…',w/2+140,h/2-60);
   }
   draw();
 </script>
 </body>
 </html>
+

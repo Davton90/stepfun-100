@@ -1,4 +1,4 @@
-<!-- Design: Minimalist Zen Garden | Unique approach: sand, stones, rake lines with click to place stone -->
+﻿<!-- Design: Minimalist Zen Garden | Unique approach: sand, stones, rake lines with click to place stone -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,10 +13,14 @@
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:1.8rem;font-weight:200;z-index:2;color:#5a5a4a;letter-spacing:.5em}
   .hint{position:absolute;bottom:30px;font-size:.9rem;z-index:2;color:#8a8a7a;font-style:italic}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
-<div class="title">禅</div>
+<div class="title">ç¦…</div>
 <div class="hint">click to place stone</div>
 <script>
   const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
@@ -52,3 +56,4 @@
 </script>
 </body>
 </html>
+

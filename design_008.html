@@ -1,4 +1,4 @@
-<!-- Design: Cyberpunk Neon Rain | Unique approach: neon symbol rain with mouse acceleration -->
+﻿<!-- Design: Cyberpunk Neon Rain | Unique approach: neon symbol rain with mouse acceleration -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,8 +13,12 @@
   .title{position:absolute;top:30px;left:30px;font-size:1.4rem;z-index:2;color:#ff00de;text-shadow:0 0 15px #ff00de;letter-spacing:.3em}
   .hud{position:absolute;bottom:20px;left:20px;right:20px;display:flex;justify-content:space-between;font-size:.7rem;color:#01cdfe;z-index:2;opacity:.7}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">NEON RAIN</div>
 <div class="hud"><span>SYS://NEON</span><span id="fps">FPS:60</span><span>NET://CONNECTED</span></div>
@@ -24,7 +28,7 @@
   function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
   resize();addEventListener('resize',resize);
   addEventListener('mousemove',e=>{const dx=e.clientX-lastX,dy=e.clientY-lastY;mouseSpeed=Math.hypot(dx,dy);lastX=e.clientX;lastY=e.clientY});
-  const symbols='アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+  const symbols='ã‚¢ã‚¤ã‚¦ã‚¨ã‚ªã‚«ã‚­ã‚¯ã‚±ã‚³ã‚µã‚·ã‚¹ã‚»ã‚½ã‚¿ãƒãƒ„ãƒ†ãƒˆãƒŠãƒ‹ãƒŒãƒãƒŽãƒãƒ’ãƒ•ãƒ˜ãƒ›ãƒžãƒŸãƒ ãƒ¡ãƒ¢ãƒ¤ãƒ¦ãƒ¨ãƒ©ãƒªãƒ«ãƒ¬ãƒ­ãƒ¯ãƒ²ãƒ³0123456789';
   const columns=Array.from({length:40},()=>({x:Math.random()*w,y:Math.random()*-h,speed:2+Math.random()*4,chars:Array.from({length:20},()=>symbols[Math.floor(Math.random()*symbols.length)])}));
   function draw(){
     ctx.fillStyle='rgba(0,0,0,.08)';ctx.fillRect(0,0,w,h);
@@ -46,3 +50,4 @@
 </script>
 </body>
 </html>
+

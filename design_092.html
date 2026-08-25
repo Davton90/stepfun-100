@@ -1,4 +1,4 @@
-<!-- Design: Mystical Sigils | Unique approach: glowing runes pulsing with mouse trace -->
+﻿<!-- Design: Mystical Sigils | Unique approach: glowing runes pulsing with mouse trace -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +12,12 @@
   canvas{display:block;position:absolute;inset:0}
   .title{position:absolute;top:30px;width:100%;text-align:center;font-size:2rem;font-weight:700;z-index:2;color:#9b59b6;text-shadow:0 0 30px rgba(155,89,182,.7);letter-spacing:.5em}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <canvas id="c"></canvas>
 <div class="title">SIGILS</div>
 <script>
@@ -22,7 +26,7 @@
   function resize(){w=canvas.width=innerWidth;h=canvas.height=innerHeight}
   resize();addEventListener('resize',resize);
   addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
-  const symbols=['ᚠ','ᚢ','ᚦ','ᚨ','ᚱ','ᚲ','ᚷ','ᚹ','ᚺ','ᚾ','ᛁ','ᛃ','ᛇ','ᛈ','ᛉ','ᛊ','ᛏ','ᛒ','ᛖ','ᛗ','ᛚ','ᛜ','ᛞ','ᛟ'];
+  const symbols=['áš ','áš¢','áš¦','áš¨','áš±','áš²','áš·','áš¹','ášº','áš¾','á›','á›ƒ','á›‡','á›ˆ','á›‰','á›Š','á›','á›’','á›–','á›—','á›š','á›œ','á›ž','á›Ÿ'];
   let runes=[];
   for(let i=0;i<15;i++)runes.push({x:Math.random()*w,y:Math.random()*h,char:symbols[Math.floor(Math.random()*symbols.length)],size:20+Math.random()*40,rot:Math.random()*Math.PI*2,alpha:.3+Math.random()*.5});
   function draw(){
@@ -46,3 +50,4 @@
 </script>
 </body>
 </html>
+

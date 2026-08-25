@@ -1,4 +1,4 @@
-<!-- Design: Weather Widget | Unique approach: animated weather icons with day/night cycle -->
+﻿<!-- Design: Weather Widget | Unique approach: animated weather icons with day/night cycle -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,17 +17,21 @@
   .icon{font-size:3rem;margin-bottom:15px}
   .toggle{margin-top:20px;padding:8px 20px;background:rgba(255,255,255,.3);border:none;color:#fff;font-family:inherit;border-radius:10px;cursor:pointer}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <div class="card">
-  <div class="icon" id="icon">☀️</div>
-  <div class="temp">24°</div>
+  <div class="icon" id="icon">â˜€ï¸</div>
+  <div class="temp">24Â°</div>
   <div class="condition" id="condition">SUNNY</div>
-  <div class="details"><span>💧 45%</span><span>🌬️ 12km/h</span><span>📍 Jakarta</span></div>
+  <div class="details"><span>ðŸ’§ 45%</span><span>ðŸŒ¬ï¸ 12km/h</span><span>ðŸ“ Jakarta</span></div>
   <button class="toggle" onclick="toggleWeather()">Toggle Day/Night</button>
 </div>
 <script>
-  const icons={sunny:'☀️',cloudy:'☁️',rainy:'🌧️',night:'🌙'};
+  const icons={sunny:'â˜€ï¸',cloudy:'â˜ï¸',rainy:'ðŸŒ§ï¸',night:'ðŸŒ™'};
   const conditions={sunny:'SUNNY',cloudy:'CLOUDY',rainy:'RAINY',night:'CLEAR NIGHT'};
   const states=['sunny','cloudy','rainy'];
   let current=0;
@@ -43,3 +47,4 @@
 </script>
 </body>
 </html>
+

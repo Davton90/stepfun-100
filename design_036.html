@@ -1,4 +1,4 @@
-<!-- Design: Variable Fonts Playground | Unique approach: single font axes with sliders and transitions -->
+﻿<!-- Design: Variable Fonts Playground | Unique approach: single font axes with sliders and transitions -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +17,12 @@
   input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:#111;border-radius:50%;cursor:pointer}
   .title{position:absolute;top:30px;font-size:1rem;color:#999;letter-spacing:.2em}
 </style>
+<style>
+  .back-to-gallery{position:fixed;top:20px;left:20px;z-index:9999;padding:10px 20px;background:rgba(0,0,0,.7);color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);transition:all .3s}
+  .back-to-gallery:hover{background:rgba(255,0,128,.8);transform:translateX(-5px)}
+</style>
 </head>
-<body>
+<body><a href="index.html" class="back-to-gallery">&larr; Back to Gallery</a>
 <div class="title">VARIABLE FONTS</div>
 <div class="preview" id="preview">Typography</div>
 <div class="controls">
@@ -34,3 +38,4 @@
 </script>
 </body>
 </html>
+
