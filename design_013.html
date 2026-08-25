@@ -40,8 +40,13 @@
     <div class="label"><span>Brightness</span><span id="val">75%</span></div>
     <input type="range" class="slider" min="0" max="100" value="75" oninput="document.getElementById('val').textContent=this.value+'%'">
   </div>
-  <button class="btn" onclick="this.style.boxShadow='inset 4px 4px 8px #a3b1c6,inset -4px -4px 8px #ffffff'">Press Me</button>
+  <button class="btn" id="pressBtn">Press Me</button>
 </div>
-</body>
-</html>
+<script>
+  const btn=document.getElementById('pressBtn');
+  const normalShadow='6px 6px 12px #a3b1c6,-6px -6px 12px #ffffff';
+  const pressedShadow='inset 4px 4px 8px #a3b1c6,inset -4px -4px 8px #ffffff';
+  let pressed=false;
+  btn.addEventListener('click',()=>{pressed=!pressed;btn.style.boxShadow=pressed?pressedShadow:normalShadow});
+</script>
 
